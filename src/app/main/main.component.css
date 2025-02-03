@@ -1,0 +1,82 @@
+/* sidebar.component.css */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+.sidebar {
+  height: 100%;
+  width: 250px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: #939393;
+  padding-top: 20px;
+  overflow-x: hidden;
+}
+.sidebar img {
+  margin-left: 20px;
+}
+.sidebar a {
+  padding: 15px 20px;
+  text-decoration: none;
+  font-size: 18px;
+  color: rgb(0, 0, 0);
+  display: block;
+}
+
+.sidebar a:hover {
+  background-color: #575757;
+}
+
+.sidebar .sidebar-brand {
+  font-size: 24px;
+  padding: 15px 20px;
+  color: #ffffff;
+  font-weight: bold;
+}
+
+.main-content {
+  margin-left: 250px; /* ระยะห่างจากซ้ายเท่ากับความกว้างของ Sidebar */
+  padding: 20px;
+}
+/* .menu-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  padding: 20px;
+}
+
+.menu-card {
+  display: flex;
+  background-color: #f8f8f8;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  padding: 15px;
+}
+
+.menu-image {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  margin-right: 15px;
+}
+
+.menu-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.menu-content h3 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.menu-content p {
+  margin: 5px 0;
+} */
+
+.btn {
+  margin-right: 5px;
+}

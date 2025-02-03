@@ -1,0 +1,80 @@
+[
+  {
+    "name": "ข้าวผัดกุ้ง",
+    "price": 120,
+    "category": "อาหารจานเดียว",
+    "imageUrl": ""
+  },
+  {
+    "name": "ต้มยำกุ้ง",
+    "price": 150,
+    "category": "ซุป",
+    "imageUrl": ""
+  },
+  {
+    "name": "สลัดผักสด",
+    "price": 90,
+    "category": "สลัด",
+    "imageUrl": ""
+  },
+  {
+    "name": "เกี๊ยวทอด",
+    "price": 80,
+    "category": "ทานเล่น",
+    "imageUrl": ""
+  },
+  {
+    "name": "ขนมจีนน้ำยา",
+    "price": 130,
+    "category": "อาหารจานเดียว",
+    "imageUrl": ""
+  },
+  {
+    "name": "หมูกรอบ",
+    "price": 100,
+    "category": "เมนูเนื้อสัตว์",
+    "imageUrl": ""
+  },
+  {
+    "name": "เป็ดย่าง",
+    "price": 180,
+    "category": "เมนูเนื้อสัตว์",
+    "imageUrl": ""
+  },
+  {
+    "name": "เกาเหลาเนื้อ",
+    "price": 140,
+    "category": "ซุป",
+    "imageUrl": ""
+  },
+  {
+    "name": "น้ำส้มคั้นสด",
+    "price": 30,
+    "category": "เครื่องดื่ม",
+    "imageUrl": ""
+  },
+  {
+    "name": "ผลไม้รวม",
+    "price": 110,
+    "category": "ของหวาน",
+    "imageUrl": ""
+  },
+  {
+    "name": "เกาเหลาเนื้อ",
+    "price": 140,
+    "category": "ซุป",
+    "imageUrl": ""
+  },
+  {
+    "name": "น้ำส้มคั้นสด",
+    "price": 30,
+    "category": "เครื่องดื่ม",
+    "imageUrl": ""
+  },
+  {
+    "name": "ผลไม้รวม",
+    "price": 110,
+    "category": "ของหวาน",
+    "imageUrl": ""
+  }
+]

@@ -1,0 +1,92 @@
+/* Main content area */
+.content {
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+h2 {
+  text-align: center;
+  font-size: 24px;
+  margin-bottom: 30px;
+}
+
+/* Order card styling */
+.order-card {
+  background-color: #f5f5f5;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.order-card h3 {
+  margin: 0;
+  font-size: 22px;
+}
+
+/* Cancel button */
+.btn-cancel {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  background-color: #e74c3c;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  cursor: pointer;
+}
+
+/* Order item styling */
+.order-item {
+  display: flex;
+  align-items: center;
+  margin: 20px 0;
+}
+
+.food-img {
+  width: 80px;
+  height: 80px;
+  border-radius: 10px;
+  margin-right: 20px;
+}
+
+.order-details {
+  flex: 1;
+}
+
+.item-info {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.quantity {
+  font-weight: bold;
+  font-size: 18px;
+}
+
+/* Order summary */
+.order-summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 30px;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+/* Confirm button */
+.btn-confirm {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  cursor: pointer;
+}
+
+.btn-confirm:hover {
+  background-color: #2980b9;
+}

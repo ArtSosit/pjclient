@@ -1,0 +1,189 @@
+<div class="sticky-container">
+  <h1>รายการอาหาร</h1>
+  <!-- เมื่อกดปุ่มนี้จะแสดง modal ขึ้นมา -->
+  <button class="btn btn-primary" (click)="showModal = true">
+    เพิ่มรายการอาหาร
+  </button>
+</div>
+
+<!-- Modal ที่จะแสดงเมื่อ showModal เป็น true -->
+<div *ngIf="showModal" class="modal-backdrop">
+  <div class="modal-container">
+    <div class="modal-header">
+      <h5>เพิ่มรายการอาหาร</h5>
+      <!-- ปิด modal เมื่อกดปุ่มนี้ -->
+      <button type="button" class="close-btn" (click)="clearMenu()">
+        &times;
+      </button>
+    </div>
+    <div class="modal-body">
+      <form>
+        <div class="form-group">
+          <label for="menuImage">รูปภาพอาหาร</label>
+          <input
+            type="file"
+            (change)="onFileChange($event, 'menuImage')"
+            id="menuImage"
+            name="menuImage"
+          />
+        </div>
+        <div class="form-group">
+          <label for="menuName">ชื่อเมนู</label>
+          <input
+            type="text"
+            class="form-control"
+            id="menuName"
+            [(ngModel)]="newMenu.name"
+            name="menuName"
+          />
+        </div>
+        <div class="form-group">
+          <label for="menuPrice">ราคา</label>
+          <input
+            type="number"
+            class="form-control"
+            id="menuPrice"
+            [(ngModel)]="newMenu.price"
+            name="menuPrice"
+          />
+        </div>
+
+        <select
+          class="form-control"
+          id="menuCategory"
+          [(ngModel)]="newMenu.category"
+          name="menuCategory"
+          (change)="checkCategory($event)"
+        >
+          <option *ngFor="let category of categories" [ngValue]="category">
+            {{ category.category_name }}
+          </option>
+          <option value="new">เพิ่มหมวดหมู่ใหม่...</option>
+        </select>
+
+        <!-- ช่องกรอกหมวดหมู่ใหม่ (จะซ่อนเมื่อไม่เลือกเพิ่มหมวดหมู่ใหม่) -->
+        <div class="form-group" *ngIf="addingNewCategory">
+          <label for="newCategory">หมวดหมู่ใหม่</label>
+          <input
+            type="text"
+            class="form-control"
+            id="newCategory"
+            [(ngModel)]="newCategory"
+            name="newCategory"
+            placeholder="กรอกหมวดหมู่ใหม่"
+          />
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" (click)="clearMenu()">ปิด</button>
+      <button class="btn btn-primary" (click)="addMenu()">เพิ่มรายการ</button>
+    </div>
+  </div>
+</div>
+
+<!-- รายการอาหารที่ดึงจาก JSON -->
+<div class="menu-container">
+  <div class="menu-card" *ngFor="let menu of menus">
+    <!-- Loop through each menu -->
+    <img src="{{ menu.imageUrl }}" alt="menu-item" class="menu-image" />
+    <!-- Display image -->
+    <div class="menu-content">
+      <h3>{{ menu.item_name }}</h3>
+      <!-- Display the item name -->
+      <p>ราคา {{ menu.price }} บาท</p>
+      <!-- Display the price -->
+      <p>หมวดหมู่: {{ menu.category }}</p>
+      <!-- Display the category -->
+
+      <div>
+        <!-- Button to delete the menu item -->
+        <button class="btn btn-danger" (click)="DeleteMenu(menu.item_id)">
+          ลบ
+        </button>
+
+        <!-- Button to edit the menu item -->
+        <button class="btn btn-success" (click)="editMenu(menu)">แก้ไข</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal ที่จะแสดงเมื่อ editModal เป็น true -->
+<div *ngIf="editModal" class="modal-backdrop">
+  <div class="modal-container">
+    <div class="modal-header">
+      <h5>แก้ไขรายการอาหาร</h5>
+      <button type="button" class="close-btn" (click)="clearMenu()">
+        &times;
+      </button>
+    </div>
+    <div class="modal-body">
+      <form>
+        <div class="form-group">
+          <label for="menuName">ชื่อเมนู</label>
+          <input
+            type="text"
+            class="form-control"
+            id="menuName"
+            [(ngModel)]="newMenu.name"
+            name="menuName"
+          />
+        </div>
+        <div class="form-group">
+          <label for="menuPrice">ราคา</label>
+          <input
+            type="number"
+            class="form-control"
+            id="menuPrice"
+            [(ngModel)]="newMenu.price"
+            name="menuPrice"
+          />
+        </div>
+        <label for="menuCategory">หมวดหมู่</label>
+        <select
+          class="form-control"
+          id="menuCategory"
+          [(ngModel)]="newMenu.category"
+          name="menuCategory"
+          (change)="checkCategory($event)"
+        >
+          <option *ngFor="let category of categories" [ngValue]="category">
+            {{ category.category_name }}
+          </option>
+          <option value="new">เพิ่มหมวดหมู่ใหม่...</option>
+        </select>
+
+        <div class="form-group" *ngIf="addingNewCategory">
+          <label for="newCategory">หมวดหมู่ใหม่</label>
+          <input
+            type="text"
+            class="form-control"
+            id="newCategory"
+            [(ngModel)]="newCategory"
+            name="newCategory"
+            placeholder="กรอกหมวดหมู่ใหม่"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="menuImage">รูปภาพ</label>
+          <input
+            type="file"
+            class="form-control"
+            id="menuImage"
+            (change)="onFileChange($event, 'menuImage')"
+            [(ngModel)]="newMenu.imageUrl"
+            name="menuImage"
+          />
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" (click)="clearMenu()">ปิด</button>
+      <button class="btn btn-primary" (click)="editcategory()">
+        อัปเดตรายการ
+      </button>
+    </div>
+  </div>
+</div>

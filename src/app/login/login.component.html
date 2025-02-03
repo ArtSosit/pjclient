@@ -1,0 +1,32 @@
+<div class="container">
+  <div class="card">
+    <h2 class="text-center">Sign in</h2>
+    <form (ngSubmit)="onSubmit()" class="form-group" #form="ngForm">
+      <label for="email">Email</label>
+      <input
+        [(ngModel)]="user.email"
+        name="email"
+        id="email"
+        class="form-control"
+        required
+      />
+      <label for="password">Password</label>
+      <input
+        type="password"
+        [(ngModel)]="user.password"
+        name="password"
+        id="password"
+        class="form-control"
+        required
+      />
+      <button
+        type="submit"
+        class="btn btn-success btn-block button"
+        [disabled]="form.invalid"
+      >
+        Login
+      </button>
+      <a routerLink="/" style="color: gray">register?</a>
+    </form>
+  </div>
+</div>

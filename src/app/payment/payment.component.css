@@ -1,0 +1,57 @@
+.content {
+  width: 80%;
+  margin: 0 auto;
+  background-color: #f4f4f4;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.order-card {
+  background-color: #e0e0e0;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.order-item {
+  display: flex;
+  margin-bottom: 15px;
+}
+
+.food-img {
+  width: 80px;
+  height: 80px;
+  margin-right: 15px;
+}
+
+.order-details {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.item-info {
+  display: flex;
+  justify-content: space-between;
+  width: 100px;
+}
+
+.order-summary {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.btn-slip {
+  background-color: #9cff9a;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+}
+
+.btn-confirm-payment {
+  background-color: #9bbcff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+}

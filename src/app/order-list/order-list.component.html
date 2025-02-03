@@ -1,0 +1,34 @@
+<div class="content">
+  <h2>รายการสั่งอาหาร</h2>
+
+  <!-- Loop through orders -->
+  <div *ngFor="let order of getorder" class="order-card">
+    <h3>โต๊ะที่ {{ order.tableNumber }}</h3>
+    <button class="btn-cancel">ยกเลิก</button>
+
+    <!-- Loop through each item in the order -->
+    <div *ngFor="let item of order.items" class="order-item">
+      <div class="order-details">
+        <span>{{ item.name }}</span>
+        <div class="item-info">
+          <span>จำนวน</span>
+          <span class="quantity">{{ item.quantity }}</span>
+        </div>
+        <div class="item-info">
+          <span>{{ item.price }} บาท</span>
+        </div>
+      </div>
+      <div>
+        <button style="margin: 5px" class="btn btn-warning">เสร็จ</button>
+        <button style="margin: 5px" class="btn btn-danger">X</button>
+      </div>
+      <br />
+    </div>
+
+    <!-- Order Summary -->
+    <div class="order-summary">
+      <span>รวม {{ order.totalPrice }} บาท</span>
+      <button class="btn-confirm">เสิร์ฟ</button>
+    </div>
+  </div>
+</div>

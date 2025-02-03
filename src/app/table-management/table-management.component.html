@@ -1,0 +1,22 @@
+<div class="container">
+  <h2 class="text-center">โต๊ะอาหาร</h2>
+  <div class="input-group mb-3">
+    <input
+      type="text"
+      [(ngModel)]="newTable.table_number"
+      placeholder="ชื่อโต๊ะ"
+      class="form-control"
+    />
+    <div class="input-group-append">
+      <button class="btn btn-primary" (click)="addTable()">เพิ่ม</button>
+    </div>
+  </div>
+
+  <div *ngFor="let table of tables" class="table-item">
+    <span>ชื่อโต๊ะ: {{ table.table_number }}</span>
+    <button class="btn btn-danger" (click)="removeTable(table.table_id)">
+      ลบ
+    </button>
+    <button class="btn btn-info" (click)="downloadQRCode()">ดาวน์โหลด</button>
+  </div>
+</div>

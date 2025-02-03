@@ -1,0 +1,18 @@
+<div class="sidebar">
+  <img
+    src="{{ imageUrl }}"
+    alt=""
+    style="border-radius: 50%; width: 50px; height: 50px"
+  />
+  <a routerLink="/main/menu" class="sidebar-brand">{{ store.store_name }}</a>
+  <a routerLink="/main/">ข้อมูลร้าน</a>
+  <a routerLink="/main/menu">รายการอาหาร</a>
+  <!-- เพิ่มลิงก์ไปยังหน้าเมนู -->
+  <a routerLink="/main/order-list">รายการอาหารที่สั่ง</a>
+  <a routerLink="/main/payment">การชำระเงิน</a>
+  <a routerLink="/main/table-management">โต๊ะอาหาร</a>
+  <a routerLink="/login" (click)="logout()">logout</a>
+</div>
+<div class="main-content">
+  <router-outlet></router-outlet>
+</div>

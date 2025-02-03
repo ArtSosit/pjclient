@@ -1,0 +1,22 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+.card {
+  width: 320px;
+  padding: 10px;
+  background-color: rgb(242, 242, 242);
+}
+.card2 {
+  width: 420px;
+  padding: 10px;
+  background-color: rgb(242, 242, 242);
+}
+.form-group {
+  margin-top: 10px;
+}
+.button {
+  width: 100px;
+}

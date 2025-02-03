@@ -1,0 +1,149 @@
+<!-- <head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head> -->
+<div class="container">
+  <div class="card" *ngIf="!isRegistered">
+    <h2 class="text-center">Register</h2>
+    <form (ngSubmit)="onRegister()">
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input
+          id="username"
+          [(ngModel)]="user.username"
+          name="username"
+          class="form-control"
+          required
+        />
+
+        <label for="email">Email</label>
+        <input
+          type="email"
+          id="email"
+          [(ngModel)]="user.email"
+          name="email"
+          class="form-control"
+          required
+        />
+
+        <label for="password">Password</label>
+        <input
+          type="password"
+          id="password"
+          [(ngModel)]="user.password"
+          name="password"
+          class="form-control"
+          required
+        />
+      </div>
+      <div style="display: flex; justify-content: center; margin-top: 10px">
+        <button type="submit" class="btn btn-success btn-block">
+          Register
+        </button>
+        <a routerLink="/login" style="color: gray">login?</a>
+      </div>
+    </form>
+  </div>
+
+  <!-- ฟอร์มสำหรับกรอกข้อมูลเพิ่มเติม -->
+  <div class="card2" *ngIf="isRegistered">
+    <h2 class="text-center">เพิ่มข้อมูล</h2>
+    <form (ngSubmit)="onSubmitAdditionalInfo()">
+      <div class="form-group">
+        <div>
+          <label for="storeImage">Store Image</label>
+          <!-- Image preview -->
+          <div
+            style="display: flex; justify-content: center; align-items: center"
+          >
+            <img
+              [src]="imagePreview"
+              class="img-thumbnail"
+              *ngIf="imagePreview"
+              alt="Store Image"
+              style="
+                width: 150px;
+                height: 150px;
+                border-radius: 50%;
+                object-fit: cover;
+                margin-bottom: 10px;
+              "
+            />
+          </div>
+          <input
+            type="file"
+            (change)="onFileChange($event, 'storeImage')"
+            id="storeImage"
+            class="form-control"
+          />
+        </div>
+
+        <label for="storeName">ชื่อร้าน</label>
+        <input
+          id="storeName"
+          [(ngModel)]="user.storeName"
+          name="storeName"
+          class="form-control"
+          required
+        />
+
+        <label for="storeDetails">รายละเอียดเพิ่มเติม</label>
+        <textarea
+          id="storeDetails"
+          [(ngModel)]="user.storeDetails"
+          name="storeDetails"
+          class="form-control"
+          required
+        ></textarea>
+
+        <label for="contactInfo">ช่องทางติดต่อ</label>
+        <input
+          id="contactInfo"
+          [(ngModel)]="user.contactInfo"
+          name="contactInfo"
+          class="form-control"
+        />
+
+        <label for="promptpay">พร้อมเพย์</label>
+        <input
+          id="promptpay"
+          [(ngModel)]="user.promptpay"
+          name="promptpay"
+          class="form-control"
+        />
+
+        <label for="openTime">เวลาเปิดร้าน</label>
+        <input
+          type="time"
+          id="openTime"
+          [(ngModel)]="user.openTime"
+          name="openTime"
+          class="form-control"
+          required
+        />
+
+        <!-- เพิ่มฟิลด์เวลาปิดร้าน -->
+        <label for="closeTime">เวลาปิดร้าน</label>
+        <input
+          type="time"
+          id="closeTime"
+          [(ngModel)]="user.closeTime"
+          name="closeTime"
+          class="form-control"
+          required
+        />
+
+        <label for="promptpayimage">รูปพร้อมเพย์</label>
+        <input
+          type="file"
+          (change)="onFileChange($event, 'promptpayImage')"
+          id="promptpayimage"
+          class="form-control"
+        />
+      </div>
+      <div style="display: flex; justify-content: center; margin-top: 10px">
+        <button type="submit" class="btn btn-primary btn-block">Submit</button>
+      </div>
+    </form>
+    <div></div>
+  </div>
+</div>
