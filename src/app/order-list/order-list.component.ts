@@ -75,6 +75,17 @@ fetchOrders(): void {
     }
   });
 }
+  deleteOrder(id:number) {
+    this.http.get<any[]>('http://localhost:3000/api/orders/' + this.userId).subscribe({
+    next: (data) => {
+      this.getorder = data; // เก็บข้อมูลที่ได้จาก API
+      console.log('Fetched orders:', this.getorder); // แสดงผลลัพธ์ที่ได้จาก API
+    },
+    error: (error) => {
+      console.error('Error loading orders:', error); // แสดงข้อผิดพลาดถ้ามี
+    }
+  });
+  }
 
 }
   

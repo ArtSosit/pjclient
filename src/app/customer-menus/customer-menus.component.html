@@ -1,7 +1,10 @@
-<nav class="navbar" style="background-color:#e3f2fd;">
-    <div class="container-fluid" style="display: flex;justify-content: space-between;">
-        <img src="assets/no-photos.png" alt="placeholder" width="50" height="50">
-        <label for="tablename">F1</label>
-        <label for="cart">cart</label>
-    </div>
+<nav class="navbar" style="background-color: #e3f2fd">
+  <div
+    class="container-fluid"
+    style="display: flex; justify-content: space-between"
+  >
+    <img src="assets/no-photos.png" alt="placeholder" width="50" height="50" />
+    <label for="tablename">{{ this.table?.table_number || "ไม่พบโต๊ะ" }}</label>
+    <label for="cart">cart</label>
+  </div>
 </nav>

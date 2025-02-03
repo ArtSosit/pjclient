@@ -22,12 +22,11 @@ export class TableManagementComponent implements OnInit {
   }
   addTable(): void {
     // Validate the new table data
+
     // if (this.newTable.table_number && this.newTable.table_qr) {
       this.https.post<any>('http://localhost:3000/api/tables/', {
         userId: this.userId,
         table_number: this.newTable.table_number,
-        table_qr: "http://api.qrserver.com/v1/create-qr-code/?data=http://localhost:4200/main/menu&size=200x200",
-
       }).subscribe(
         (response) => {
           // Assuming response contains the created table details
@@ -52,9 +51,9 @@ export class TableManagementComponent implements OnInit {
     }
   }
 
-downloadQRCode() {
+downloadQRCode(id: number) {
   // URL ที่ต้องการให้ลูกค้าสแกนแล้วเปิด
-  const targetUrl = `http://localhost:4200/main/menu`;
+  const targetUrl = `${window.location.origin}/customer/${this.userId}/${id}`;
 
   // ใช้ API สร้าง QR Code
   const qrUrl = `http://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(targetUrl)}&size=200x200`;
@@ -74,7 +73,14 @@ downloadQRCode() {
     })
     .catch(error => console.error('เกิดข้อผิดพลาดในการดาวน์โหลด QR Code:', error));
 }
+  testqr(id: number) {
+  const targetUrl = `${window.location.origin}/customer/${this.userId}/${id}`;
+console.log("✅ Target URL:", targetUrl); 
+  // ใช้ API สร้าง QR Code
+  const qrUrl = `http://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(targetUrl)}&size=200x200`;
 
+     window.open(targetUrl, '_blank');
+  }
 
 
   

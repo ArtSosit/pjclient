@@ -17,6 +17,9 @@
     <button class="btn btn-danger" (click)="removeTable(table.table_id)">
       ลบ
     </button>
-    <button class="btn btn-info" (click)="downloadQRCode()">ดาวน์โหลด</button>
+    <button class="btn btn-info" (click)="downloadQRCode(table.table_id)">
+      ดาวน์โหลด
+    </button>
+    <button class="btn btn-info" (click)="testqr(table.table_id)">test</button>
   </div>
 </div>

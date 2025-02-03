@@ -4,7 +4,7 @@
   <!-- Loop through orders -->
   <div *ngFor="let order of getorder" class="order-card">
     <h3>โต๊ะที่ {{ order.tableNumber }}</h3>
-    <button class="btn-cancel">ยกเลิก</button>
+    <button class="btn-cancel" (click)="deleteOrder(order.id)">ยกเลิก</button>
 
     <!-- Loop through each item in the order -->
     <div *ngFor="let item of order.items" class="order-item">
