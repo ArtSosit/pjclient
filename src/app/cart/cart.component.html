@@ -1,0 +1,36 @@
+<div class="cart-container">
+  <h2>🛒 ตะกร้าสินค้า</h2>
+
+  <!-- ถ้าไม่มีสินค้า -->
+  <div *ngIf="cart.length === 0" class="empty-cart">
+    <p>ไม่มีสินค้าในตะกร้า</p>
+  </div>
+
+  <!-- แสดงรายการสินค้า -->
+  <ul *ngIf="cart.length > 0">
+    <li *ngFor="let item of cart; let i = index" class="cart-item">
+      <img [src]="item.imageUrl" alt="menu image" class="cart-image" />
+      <div class="cart-details">
+        <h3>{{ item.item_name }}</h3>
+        <p>ราคา: {{ item.price }} บาท</p>
+
+        <!-- เลือกจำนวนสินค้า -->
+        <div class="quantity-container">
+          <button (click)="updateQuantity(i, item.quantity - 1)">-</button>
+          <input
+            type="number"
+            [(ngModel)]="item.quantity"
+            (change)="updateQuantity(i, item.quantity)"
+          />
+          <button (click)="updateQuantity(i, item.quantity + 1)">+</button>
+        </div>
+
+        <p>รวม: {{ item.price * item.quantity }} บาท</p>
+      </div>
+      <button (click)="removeFromCart(i)">ลบ</button>
+    </li>
+  </ul>
+
+  <!-- ปุ่มกลับไปหน้าเมนู -->
+  <button class="back-btn" routerLink="../food">⬅️ กลับไปเลือกสินค้า</button>
+</div>

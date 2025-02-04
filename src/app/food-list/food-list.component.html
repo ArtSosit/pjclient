@@ -1,0 +1,94 @@
+<div class="menu-container">
+  <div class="menu-card" *ngFor="let menu of menus" (click)="openModal(menu)">
+    <!-- Loop through each menu and add click event -->
+    <img alt="menu-item" class="menu-image" [src]="menu.imageUrl" />
+    <div class="menu-content">
+      <h3>{{ menu.item_name }}</h3>
+      <p>ราคา {{ menu.price }} บาท</p>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div *ngIf="selectedMenu" class="modal-backdrop">
+  <div *ngIf="selectedMenu" class="modal-backdrop">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h2>{{ selectedMenu.item_name }}</h2>
+        <button type="button" class="close-btn" (click)="closeModal()">
+          &times;
+        </button>
+      </div>
+
+      <div class="modal-body" style="text-align: center">
+        <img
+          [src]="selectedMenu.imageUrl"
+          alt="menu image"
+          class="menu-image"
+          style="width: 100%; height: auto"
+        />
+        <p>{{ selectedMenu.price }} บาท</p>
+
+        <!-- ส่วนเลือกจำนวน -->
+        <div class="quantity-container">
+          <button class="quantity-btn" (click)="decreaseQuantity()">-</button>
+          <input
+            type="number"
+            [(ngModel)]="quantity"
+            (change)="validateQuantity()"
+            class="quantity-input"
+          />
+          <button class="quantity-btn" (click)="increaseQuantity()">+</button>
+        </div>
+
+        <!-- ปุ่มเก็บลงตะกร้า -->
+        <button class="add-to-cart-btn" (click)="addToCart()">
+          🛒 เก็บลงตะกร้า
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--car Modal -->
+<div *ngIf="selectedMenu" class="modal-backdrop">
+  <div *ngIf="selectedMenu" class="modal-backdrop">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h2>{{ selectedMenu.item_name }}</h2>
+        <button type="button" class="close-btn" (click)="closeModal()">
+          &times;
+        </button>
+      </div>
+
+      <div class="modal-body" style="text-align: center">
+        <img
+          [src]="selectedMenu.imageUrl"
+          alt="menu image"
+          class="menu-image"
+          style="width: 100%; height: auto"
+        />
+        <p>{{ selectedMenu.price }} บาท</p>
+
+        <!-- ส่วนเลือกจำนวน -->
+        <div class="quantity-container">
+          <button class="quantity-btn" (click)="decreaseQuantity()">-</button>
+          <input
+            type="number"
+            [(ngModel)]="quantity"
+            (change)="validateQuantity()"
+            class="quantity-input"
+          />
+          <button class="quantity-btn" (click)="increaseQuantity()">+</button>
+        </div>
+
+        <!-- ปุ่มเก็บลงตะกร้า -->
+        <button class="add-to-cart-btn" (click)="addToCart()">
+          🛒 เก็บลงตะกร้า
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+

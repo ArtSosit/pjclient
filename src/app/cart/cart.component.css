@@ -1,0 +1,152 @@
+/* 🌟 ตั้งค่าหน้าหลักของตะกร้า */
+.cart-container {
+  max-width: 600px;
+  margin: 50px auto;
+  padding: 20px;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+/* 🌟 หัวข้อ */
+h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+/* 🌟 ปุ่ม "กลับไปเลือกสินค้า" */
+.back-btn {
+  display: block;
+  width: 100%;
+  margin-top: 20px;
+  padding: 10px;
+  background: #ff6600;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.back-btn:hover {
+  background: #e65c00;
+}
+
+/* 🌟 ถ้าตะกร้าว่าง */
+.empty-cart {
+  text-align: center;
+  font-size: 18px;
+  color: #888;
+}
+
+.empty-cart button {
+  padding: 10px 20px;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.empty-cart button:hover {
+  background: #0056b3;
+}
+
+/* 🌟 รายการสินค้า */
+.cart-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f9f9f9;
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.cart-image {
+  width: 80px;
+  height: 80px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.cart-details {
+  flex: 1;
+  margin-left: 15px;
+  text-align: left;
+}
+
+.cart-details h3 {
+  font-size: 18px;
+  margin: 0;
+}
+
+.cart-details p {
+  margin: 5px 0;
+  font-size: 16px;
+  color: #555;
+}
+
+/* 🌟 ปุ่มเพิ่ม/ลดจำนวนสินค้า */
+.quantity-container {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.quantity-container button {
+  width: 30px;
+  height: 30px;
+  font-size: 18px;
+  background: #28a745;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.quantity-container button:hover {
+  background: #218838;
+}
+
+.quantity-input {
+  width: 50px;
+  text-align: center;
+  font-size: 16px;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+/* 🌟 ปุ่มลบสินค้า */
+button.remove-btn {
+  background: #dc3545;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button.remove-btn:hover {
+  background: #c82333;
+}
+
+/* 🌟 ปุ่มไปหน้าตะกร้า */
+.cart-btn {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  background: #007bff;
+  color: white;
+  text-align: center;
+  border-radius: 5px;
+  font-size: 18px;
+  text-decoration: none;
+}
+
+.cart-btn:hover {
+  background: #0056b3;
+}

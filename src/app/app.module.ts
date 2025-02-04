@@ -16,6 +16,8 @@ import { TableManagementComponent } from './table-management/table-management.co
 import { MenuComponent } from './menu/menu.component';
 import { QRCodeModule } from 'angularx-qrcode';
 import { CustomerMenusComponent } from './customer-menus/customer-menus.component';
+import { FoodListComponent } from './food-list/food-list.component';
+import { CartComponent } from './cart/cart.component';
 const routes: Routes = [
   { path: '', component: RegisterComponent },
   // { path: 'register', component: RegisterComponent },
@@ -25,8 +27,13 @@ const routes: Routes = [
     { path: 'payment', component: PaymentComponent },
     { path: 'table-management', component: TableManagementComponent },
     { path: 'menu', component: MenuComponent }
+   
   ]},
-  { path: 'customer/:store/:table', component: CustomerMenusComponent, pathMatch: 'prefix' },
+  {
+    path: 'customer/:store/:table', component: CustomerMenusComponent, pathMatch: 'prefix', children: [
+      { path: 'food', component: FoodListComponent },
+       { path: 'cart', component: CartComponent}
+  ]},
 
 ];
 
@@ -41,7 +48,9 @@ const routes: Routes = [
     PaymentComponent,
     TableManagementComponent,
     MenuComponent,
-    CustomerMenusComponent
+    CustomerMenusComponent,
+    FoodListComponent,
+    CartComponent
   ],
   imports: [
     HttpClientModule,
