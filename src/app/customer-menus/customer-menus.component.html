@@ -6,9 +6,7 @@
     <label for="tablename"
       >โต๊ะ {{ this.table?.table_number || "ไม่พบโต๊ะ" }}</label
     >
-    <label for="cart">
-      <a routerLink="./cart">cart icon</a>
-    </label>
+    <label for="cart"><a routerLink="./cart">cart icon</a></label>
   </div>
 </nav>
 <router-outlet></router-outlet>
@@ -17,7 +15,7 @@
     class="container-fluid"
     style="display: flex; justify-content: space-between"
   >
-    <label for="list">รายการที่สั่ง</label>
+    <label for="list"><a routerLink="./list">รายการที่สั่ง</a></label>
     <label for="tablename">ใบเสร็จ</label>
     <label for="tablename">ชำระเงิน</label>
   </div>

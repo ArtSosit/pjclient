@@ -18,7 +18,7 @@ export class FoodListComponent implements OnInit {
   storeId: string | null = null;
   tableId: string | null = null;
   table: any;
-   selectedMenu: any = null;
+  selectedMenu: any = null;
 
 
   fetchMenus(): void {
@@ -114,6 +114,7 @@ quantity: number = 1; // ค่าจำนวนเริ่มต้นเป�
       } else {
         // ถ้ายังไม่มี ให้เพิ่มใหม่
         this.cart.push({
+          item_id:this.selectedMenu.item_id,
           item_name: this.selectedMenu.item_name,
           price: this.selectedMenu.price,
           quantity: this.quantity,

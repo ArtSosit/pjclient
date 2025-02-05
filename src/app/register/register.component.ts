@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth.service';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
 })
-export class RegisterComponent {
+export class RegisterComponent implements OnInit{
   isRegistered = false;
   user = {
     userID: '',
@@ -26,23 +26,61 @@ export class RegisterComponent {
     openTime: '',
     closeTime: ''
   };
+  auth = {
+    email: '',
+    password: ''
+  }
+  loginError: string | null = null;
   storeImage: File | null = null;
   promptpayImage: File | null = null;
   imagePreview: string | ArrayBuffer | null = null;
   
   constructor(private authService: AuthService, private http: HttpClient, private router: Router) { }
-  // onFileSelected(event: any) {
-  //   const file = event.target.files[0];
-  //   if (file) {
-  //     this.user.storeImage = file;
+  ngOnInit(): void {
+    const storedEmail = localStorage.getItem('email');
+    const storedPassword = localStorage.getItem('password');
+  
+    if (storedEmail && storedPassword) {
+      // ถ้ามีข้อมูลให้ทำการล็อกอินอัตโนมัติ
+     
+      this.auth.email = storedEmail;
+      this.auth.password = storedPassword;
+      this.onSubmit(this.auth.email,this.auth.password); // เรียกฟังก์ชัน onSubmit() เพื่อล็อกอิน
+    }
+  }
 
-  //     const reader = new FileReader();
-  //     reader.onload = () => {
-  //       this.imagePreview = reader.result;
-  //     };
-  //     reader.readAsDataURL(file);
-  //   }
-  // }
+  onSubmit(email: string,password: string) {
+  if (!email || !password) {
+      this.loginError = 'Please enter both email and password.';
+      return;
+    }
+
+    this.http.post("http://localhost:3000/api/auth/login", this.auth).subscribe(
+      (response: any) => {
+        console.log('Login response:', response);
+        // Check the success flag in the response
+        if (response) {
+          console.log('Login successful:', response);
+          
+          // เก็บ userId และข้อมูลการล็อกอินใน localStorage
+          localStorage.setItem('userId', response.userId);
+          localStorage.setItem('email', this.auth.email); 
+          localStorage.setItem('password', this.auth.password);
+          
+          // Redirect after successful login
+          this.router.navigate(['/main/menu']);
+        } else {
+          this.loginError = 'Invalid credentials. Please try again.';
+        }
+      },
+      (error) => {
+        // Handle login error: show user-friendly message
+        console.error('Login error:', error);
+        this.loginError = 'An error occurred during login. Please try again later.';
+      }
+    );
+}
+
   onRegister() {
     this.authService.register(this.user).subscribe(
       response => {

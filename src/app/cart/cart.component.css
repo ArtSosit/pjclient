@@ -20,7 +20,7 @@ h2 {
   display: block;
   width: 100%;
   margin-top: 20px;
-  padding: 10px;
+  padding: 5px;
   background: #ff6600;
   color: white;
   border: none;
@@ -31,6 +31,18 @@ h2 {
 
 .back-btn:hover {
   background: #e65c00;
+}
+
+.btn-success {
+  display: block;
+  width: 100%;
+  margin-top: 20px;
+  padding: 5px;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 18px;
+  cursor: pointer;
 }
 
 /* 🌟 ถ้าตะกร้าว่าง */

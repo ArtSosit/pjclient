@@ -18,6 +18,7 @@ import { QRCodeModule } from 'angularx-qrcode';
 import { CustomerMenusComponent } from './customer-menus/customer-menus.component';
 import { FoodListComponent } from './food-list/food-list.component';
 import { CartComponent } from './cart/cart.component';
+import { ListsComponent } from './lists/lists.component';
 const routes: Routes = [
   { path: '', component: RegisterComponent },
   // { path: 'register', component: RegisterComponent },
@@ -32,7 +33,8 @@ const routes: Routes = [
   {
     path: 'customer/:store/:table', component: CustomerMenusComponent, pathMatch: 'prefix', children: [
       { path: 'food', component: FoodListComponent },
-       { path: 'cart', component: CartComponent}
+      { path: 'cart', component: CartComponent },
+       {path: 'list',component:ListsComponent}
   ]},
 
 ];
@@ -50,7 +52,8 @@ const routes: Routes = [
     MenuComponent,
     CustomerMenusComponent,
     FoodListComponent,
-    CartComponent
+    CartComponent,
+    ListsComponent
   ],
   imports: [
     HttpClientModule,

@@ -53,7 +53,7 @@ export class TableManagementComponent implements OnInit {
 
 downloadQRCode(id: number) {
   // URL ที่ต้องการให้ลูกค้าสแกนแล้วเปิด
-  const targetUrl = `${window.location.origin}/customer/${this.userId}/${id}`;
+  const targetUrl = `${window.location.origin}/customer/${this.userId}/${id}/food`;
 
   // ใช้ API สร้าง QR Code
   const qrUrl = `http://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(targetUrl)}&size=200x200`;
@@ -74,7 +74,7 @@ downloadQRCode(id: number) {
     .catch(error => console.error('เกิดข้อผิดพลาดในการดาวน์โหลด QR Code:', error));
 }
   testqr(id: number) {
-  const targetUrl = `${window.location.origin}/customer/${this.userId}/${id}`;
+  const targetUrl = `${window.location.origin}/customer/${this.userId}/${id}/food`;
 console.log("✅ Target URL:", targetUrl); 
   // ใช้ API สร้าง QR Code
   const qrUrl = `http://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(targetUrl)}&size=200x200`;
