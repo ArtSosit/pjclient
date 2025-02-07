@@ -10,7 +10,7 @@ import { Component, OnInit } from '@angular/core';
 export class OrderListComponent implements OnInit {
   getorder: any[] = [];
   userId: string | null = null;
-  selectedStatus: string = "cancelled"; // ค่าเริ่มต้นแสดงทั้งหม
+  selectedStatus: string = "all"; // ค่าเริ่มต้นแสดงทั้งหม
   
   constructor(private http: HttpClient) {this.fetchOrders(); }
   // newTable: any = {table_number:'',table_qr:''}

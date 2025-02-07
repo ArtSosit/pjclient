@@ -2,13 +2,15 @@
   <h2>รายการสั่งอาหาร</h2>
 
   <!-- Dropdown for selecting order status -->
-  <label for="orderStatus">แสดงรายการ:</label>
-  <select id="orderStatus" [(ngModel)]="selectedStatus">
-    <option value="all">ทั้งหมด</option>
-    <option value="pending">รอดำเนินการ</option>
-    <option value="success">เสร็จสิ้น</option>
-    <option value="cancelled">ถูกยกเลิก</option>
-  </select>
+  <div class="mb-2">
+    <label for="orderStatus">แสดงรายการ:</label>
+    <select class="form-select" id="orderStatus" [(ngModel)]="selectedStatus">
+      <option value="all">ทั้งหมด</option>
+      <option value="pending">รอดำเนินการ</option>
+      <option value="success">เสร็จสิ้น</option>
+      <option value="cancelled">ถูกยกเลิก</option>
+    </select>
+  </div>
 
   <!-- Loop through filtered orders -->
   <div *ngFor="let order of filteredOrders()" class="order-card">
@@ -51,7 +53,19 @@
     <!-- Order Summary -->
     <div class="order-summary">
       <span>รวม {{ order.totalPrice }} บาท</span>
-      <span>{{ order.orderstatus }}</span>
+      <span
+        [ngStyle]="{
+          color:
+            order.orderstatus === 'pending'
+              ? 'orange'
+              : order.orderstatus === 'success'
+              ? 'green'
+              : order.orderstatus === 'cancelled'
+              ? 'red'
+              : 'black'
+        }"
+        >{{ order.orderstatus }}</span
+      >
       <button class="btn-confirm" (click)="Order_success(order.order)">
         เสิร์ฟ
       </button>
