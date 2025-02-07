@@ -57,19 +57,19 @@ this.http.get<any[]>('http://localhost:3000/api/tables/' + this.userId).subscrib
     const foundTable = data.find(table => table.table_id == this.tableId);
 
     if (foundTable) {
-      console.log('✅ Table ID matches:', this.tableId);
+      console.log('Table ID matches:', this.tableId);
       
       // ใส่ข้อมูลโต๊ะที่เจอ ลงใน this.table
       this.table = foundTable;
 
     } else {
-      console.warn('⚠️ Table ID not found:', this.tableId);
+      console.warn('Table ID not found:', this.tableId);
     }
 
     console.log('Updated Table:', this.table);
   },
   error: (error) => {
-    console.error('❌ Error fetching tables:', error);
+    console.error('Error fetching tables:', error);
   }
 });
   }
@@ -125,7 +125,7 @@ quantity: number = 1; // ค่าจำนวนเริ่มต้นเป�
       }
 
       this.saveCart(); // บันทึกลง localStorage
-      console.log("🛒 ตะกร้าสินค้า:", this.cart);
+      console.log("ตะกร้าสินค้า:", this.cart);
       alert(`เพิ่ม ${this.selectedMenu.item_name} จำนวน ${this.quantity} ชิ้น ลงในตะกร้าแล้ว!`);
       this.closeModal();
     }

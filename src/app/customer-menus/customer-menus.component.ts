@@ -46,19 +46,19 @@ export class CustomerMenusComponent implements OnInit {
       const foundTable = data.find(table => table.table_id === parseInt(this.tableId!, 10));
 
       if (foundTable) {
-        console.log('✅ Table ID matches:', this.tableId);
+        console.log('Table ID matches:', this.tableId);
         
         // ใส่ข้อมูลโต๊ะที่เจอ ลงใน this.table
         this.table = foundTable;  
 
       } else {
-        console.warn('⚠️ Table ID not found:', this.tableId);
+        console.warn('Table ID not found:', this.tableId);
       }
 
       console.log('Updated Table:', this.table);
     },
     error: (error) => {
-      console.error('❌ Error fetching tables:', error);
+      console.error('Error fetching tables:', error);
     }
   });
 

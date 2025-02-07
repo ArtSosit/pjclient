@@ -75,7 +75,7 @@ downloadQRCode(id: number) {
 }
   testqr(id: number) {
   const targetUrl = `${window.location.origin}/customer/${this.userId}/${id}/food`;
-console.log("✅ Target URL:", targetUrl); 
+console.log("Target URL:", targetUrl); 
   // ใช้ API สร้าง QR Code
   const qrUrl = `http://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(targetUrl)}&size=200x200`;
 
