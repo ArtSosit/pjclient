@@ -17,6 +17,20 @@
         <p>จำนวน: {{ item.quantity }}</p>
         <p>ราคา: {{ item.price }} บาท</p>
         <p>รวม: {{ item.price * item.quantity }} บาท</p>
+        <p
+          [ngStyle]="{
+            color:
+              item.status === 'Pending'
+                ? 'orange'
+                : item.status === 'Success'
+                ? 'green'
+                : item.status === 'Cancelled'
+                ? 'red'
+                : 'black'
+          }"
+        >
+          สถานะ: {{ item.status }}
+        </p>
       </div>
     </div>
   </ng-container>

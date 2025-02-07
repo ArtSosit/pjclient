@@ -1,10 +1,21 @@
 <div class="content">
   <h2>รายการสั่งอาหาร</h2>
 
-  <!-- Loop through orders -->
-  <div *ngFor="let order of getorder" class="order-card">
+  <!-- Dropdown for selecting order status -->
+  <label for="orderStatus">แสดงรายการ:</label>
+  <select id="orderStatus" [(ngModel)]="selectedStatus">
+    <option value="all">ทั้งหมด</option>
+    <option value="pending">รอดำเนินการ</option>
+    <option value="success">เสร็จสิ้น</option>
+    <option value="cancelled">ถูกยกเลิก</option>
+  </select>
+
+  <!-- Loop through filtered orders -->
+  <div *ngFor="let order of filteredOrders()" class="order-card">
     <h3>โต๊ะที่ {{ order.tableNumber }}</h3>
-    <button class="btn-cancel" (click)="deleteOrder(order.id)">ยกเลิก</button>
+    <button class="btn-cancel" (click)="Order_cancelled(order.order)">
+      ยกเลิก
+    </button>
 
     <!-- Loop through each item in the order -->
     <div *ngFor="let item of order.items" class="order-item">
@@ -19,8 +30,20 @@
         </div>
       </div>
       <div>
-        <button style="margin: 5px" class="btn btn-warning">เสร็จ</button>
-        <button style="margin: 5px" class="btn btn-danger">X</button>
+        <button
+          style="margin: 5px"
+          class="btn btn-warning"
+          (click)="Detail_complate(item.detail_id)"
+        >
+          เสร็จ
+        </button>
+        <button
+          style="margin: 5px"
+          class="btn btn-danger"
+          (click)="Detail_cancelled(item.detail_id)"
+        >
+          ยกเลิก
+        </button>
       </div>
       <br />
     </div>
@@ -28,7 +51,10 @@
     <!-- Order Summary -->
     <div class="order-summary">
       <span>รวม {{ order.totalPrice }} บาท</span>
-      <button class="btn-confirm">เสิร์ฟ</button>
+      <span>{{ order.orderstatus }}</span>
+      <button class="btn-confirm" (click)="Order_success(order.order)">
+        เสิร์ฟ
+      </button>
     </div>
   </div>
 </div>
