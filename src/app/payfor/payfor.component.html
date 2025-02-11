@@ -1,0 +1,32 @@
+<div>
+  <h2>ชำระเงิน</h2>
+
+  <!-- ถ้าไม่มีสินค้า -->
+  <div *ngIf="!lists.items.length" class="empty-cart">
+    <p>ว่าง</p>
+  </div>
+
+  <ng-container *ngIf="lists.items.length">
+    <ng-container *ngFor="let item of lists.items">
+      <div *ngIf="item.status === 'Success'" class="card">
+        <div>
+          <img [src]="item.imageUrl" alt="menu image" class="cart-image" />
+        </div>
+        <div class="cart-details">
+          <h3>{{ item.name }}</h3>
+          <p>จำนวน: {{ item.quantity }}</p>
+          <p>ราคา: {{ item.price }} บาท</p>
+          <p>รวม: {{ item.price * item.quantity }} บาท</p>
+          <p style="color: green">สถานะ: {{ item.status }}</p>
+        </div>
+      </div>
+    </ng-container>
+  </ng-container>
+
+  <!-- ปุ่มกลับไปเลือกสินค้า -->
+  <div class="button-container">
+    <button class="btn btn-secondary" routerLink="../food">
+      กลับไปเลือกสินค้า
+    </button>
+  </div>
+</div>

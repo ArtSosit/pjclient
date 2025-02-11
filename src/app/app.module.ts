@@ -19,6 +19,8 @@ import { CustomerMenusComponent } from './customer-menus/customer-menus.componen
 import { FoodListComponent } from './food-list/food-list.component';
 import { CartComponent } from './cart/cart.component';
 import { ListsComponent } from './lists/lists.component';
+import { InfoComponent } from './info/info.component';
+import { PayforComponent } from './payfor/payfor.component';
 const routes: Routes = [
   { path: '', component: RegisterComponent },
   // { path: 'register', component: RegisterComponent },
@@ -27,14 +29,15 @@ const routes: Routes = [
     { path: 'order-list', component: OrderListComponent },
     { path: 'payment', component: PaymentComponent },
     { path: 'table-management', component: TableManagementComponent },
-    { path: 'menu', component: MenuComponent }
-   
+    { path: 'menu', component: MenuComponent },
+    { path: 'info', component:InfoComponent}
   ]},
   {
     path: 'customer/:store/:table', component: CustomerMenusComponent, pathMatch: 'prefix', children: [
       { path: 'food', component: FoodListComponent },
       { path: 'cart', component: CartComponent },
-       {path: 'list',component:ListsComponent}
+      { path: 'list', component: ListsComponent },
+      {path: 'payfor',component: PayforComponent}
   ]},
 
 ];
@@ -53,7 +56,9 @@ const routes: Routes = [
     CustomerMenusComponent,
     FoodListComponent,
     CartComponent,
-    ListsComponent
+    ListsComponent,
+    InfoComponent,
+    PayforComponent
   ],
   imports: [
     HttpClientModule,

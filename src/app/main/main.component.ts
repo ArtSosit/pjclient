@@ -19,12 +19,11 @@ export class MainComponent implements OnInit {
   ngOnInit() {
 
 
-    this.userId = localStorage.getItem('userId'); // ดึง userId จาก localStorage
+    this.userId = localStorage.getItem('userId'); 
     if (!this.userId) {
-      // ถ้าไม่มี userId ให้รีไดเรกต์ไปยังหน้าล็อกอิน
       this.router.navigate(['/login']);
     } else {
-      this.fetchMenus(); // เรียกใช้งานฟังก์ชันเมื่อ component ถูกสร้าง
+      this.fetchMenus(); 
       
     }
   }
