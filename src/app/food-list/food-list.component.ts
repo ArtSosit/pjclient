@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-
+import { environment } from '@env/environment';
 @Component({
   selector: 'app-food-list',
   templateUrl: './food-list.component.html',
@@ -25,7 +25,7 @@ export class FoodListComponent implements OnInit {
     // Retrieve the userId from localStorage
     this.userId = localStorage.getItem('storeId');
     // Fetch categories
-    this.http.get<any[]>('http://localhost:3000/api/categories/' + this.userId).subscribe(
+    this.http.get<any[]>(`${environment.apiBaseUrl}/api/categories/` + this.userId).subscribe(
       (data) => {
         this.categories = data;
         console.log(this.categories)
@@ -35,21 +35,22 @@ export class FoodListComponent implements OnInit {
       }
     );
 
-    this.http.get<any[]>('http://localhost:3000/api/menus/' + this.userId).subscribe(
+    this.http.get<any[]>(`${environment.apiBaseUrl}/api/menus/` + this.userId).subscribe(
       (data) => {
         // Map over the fetched menus and update imageUrl dynamically
         console.log("data", data)
         this.menus = data.map(menu => ({
           ...menu,  // Copy the properties of the menu
-          imageUrl: `http://localhost:3000/uploads/${menu.item_image}`  // Prepend the server URL to imageUrl
+          imageUrl: `${environment.apiBaseUrl}/uploads/${menu.item_image}`  // Prepend the server URL to imageUrl
         }));
+        console.log("food",this.menus)
       },
       (error) => {
         console.error('Error loading menu items:', error);
       }
     
     );
-this.http.get<any[]>('http://localhost:3000/api/tables/' + this.userId).subscribe({
+this.http.get<any[]>(`${environment.apiBaseUrl}/api/tables/` + this.userId).subscribe({
   next: (data) => {
     console.log('Fetched tables data:', data); // ตรวจสอบข้อมูลที่ได้รับจาก API
 

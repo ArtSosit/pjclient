@@ -6,8 +6,8 @@
     <p>ว่าง</p>
   </div>
 
-  <ng-container *ngIf="lists.items.length">
-    <ng-container *ngFor="let item of lists.items">
+  <ng-container *ngIf="groupedItems.length">
+    <ng-container *ngFor="let item of groupedItems">
       <div *ngIf="item.status === 'Success'" class="card">
         <div>
           <img [src]="item.imageUrl" alt="menu image" class="cart-image" />
@@ -50,7 +50,9 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="staticBackdropLabel">ชำระเงิน</h1>
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">
+          🧾 ใบเสร็จรับเงิน
+        </h1>
         <button
           type="button"
           class="btn-close"
@@ -58,12 +60,69 @@
           aria-label="Close"
         ></button>
       </div>
-      <div class="modal-body"></div>
+
+      <div class="modal-body">
+        <div class="receipt">
+          <!-- จัด QR Code ให้อยู่ตรงกลาง -->
+          <div class="text-center">
+            <img class="qrcode img-fluid" [src]="qrcode" alt="PromptPay QR" />
+          </div>
+
+          <hr />
+
+          <!-- ถ้าไม่มีสินค้า -->
+          <div *ngIf="!groupedItems.length" class="text-center">
+            <p>🛒 ไม่มีสินค้าในบิล</p>
+          </div>
+
+          <ng-container *ngIf="groupedItems.length">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>สินค้า</th>
+                  <th>จำนวน</th>
+                  <th>ราคา</th>
+                  <th>รวม</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of groupedItems">
+                  <td>{{ item.name }}</td>
+                  <td>{{ item.quantity }}</td>
+                  <td>{{ item.price }} บาท</td>
+                  <td>{{ item.price * item.quantity }} บาท</td>
+                </tr>
+              </tbody>
+            </table>
+          </ng-container>
+
+          <hr />
+          <div class="text-end">
+            <h4>💰 ยอดรวม: {{ getTotalAmount() }} บาท</h4>
+          </div>
+
+          <!-- Input อัปโหลดสลิป -->
+          <div class="mt-3">
+            <label for="slipUpload" class="form-label"
+              >📎 อัปโหลดสลิปการชำระเงิน</label
+            >
+            <input
+              type="file"
+              class="form-control"
+              id="slipUpload"
+              (change)="onSlipUpload($event)"
+            />
+          </div>
+        </div>
+      </div>
+
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-          Close
+          ปิด
         </button>
-        <button type="button" class="btn btn-primary">Understood</button>
+        <button type="button" class="btn btn-primary" (click)="submit()">
+          อัปโหลดสลิป
+        </button>
       </div>
     </div>
   </div>

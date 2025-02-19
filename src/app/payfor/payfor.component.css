@@ -28,5 +28,12 @@
 .button-container {
   text-align: center;
   margin-top: 20px;
-  
+}
+.qrcode {
+  width: 50%;
+  height: 200px;
+}
+
+.model-body {
+  /* Ensure the div takes the full viewport height */
 }

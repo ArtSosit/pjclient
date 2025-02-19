@@ -1,11 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-
+import { environment } from '@env/environment';
 @Component({
   selector: 'app-lists',
   templateUrl: './lists.component.html',
-  styleUrl: './lists.component.css'
+  styleUrls: ['./lists.component.css']
 })
 export class ListsComponent implements OnInit {
   lists: any;
@@ -25,7 +25,7 @@ loadList() {
     return;
   }
 
-  this.http.get<any>(`http://localhost:3000/api/orders/${storeId}/${orderId}`)
+  this.http.get<any>(`${environment.apiBaseUrl}/api/orders/${storeId}/${orderId}`)
     .subscribe({
       next: (data) => {
         console.log("รายการสินค้าในออเดอร์:", data);
@@ -38,7 +38,7 @@ loadList() {
         this.lists = data; // เก็บข้อมูลทั้งหมดไว้
         this.lists.items = data.items.map((item:any) => ({
           ...item,  // คัดลอกข้อมูลเดิมของสินค้า
-          imageUrl: `http://localhost:3000/uploads/${item.image || "default.jpg"}`  // ป้องกันภาพที่ไม่มี
+          imageUrl: `${environment.apiBaseUrl}/uploads/${item.image || "default.jpg"}`  // ป้องกันภาพที่ไม่มี
         }));
 
         console.log("รูปภาพสินค้า:", this.lists.items);

@@ -1,6 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { environment } from '@env/environment';
+
+
 
 @Component({
   selector: 'app-cart',
@@ -76,12 +79,12 @@ export class CartComponent {
 
   console.log("📦 ส่งคำสั่งซื้อ:", orderData);
 
-  this.http.post<{ message: string; orderId: number }>("http://localhost:3000/api/orders/", orderData)
+  this.http.post<{ message: string; orderId: number }>(`${environment.apiBaseUrl}/api/orders/`, orderData)
     .subscribe({
       next: (response) => {
         console.log("✅ คำสั่งซื้อตอบกลับ:", response);
         
-        // ✅ ถ้าเป็นออเดอร์ใหม่ ให้เก็บ orderId ลง localStorage
+        // ✅ ถ้าเป็นออเดอร์ใหม่ ให้เก็บ orderId ลง localStorage  
         if (!orderId) {
           localStorage.setItem("orderId", response.orderId.toString());
         }

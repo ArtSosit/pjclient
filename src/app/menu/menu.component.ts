@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-
+import { environment } from '@env/environment';
 @Component({
   selector: 'app-menu',
   templateUrl: './menu.component.html',
@@ -31,7 +31,7 @@ export class MenuComponent implements OnInit {
   this.userId = localStorage.getItem('userId');
 
   // Fetch categories
-  this.http.get<any[]>('http://localhost:3000/api/categories/' + this.userId).subscribe(
+  this.http.get<any[]>(`${environment.apiBaseUrl}/api/categories/` + this.userId).subscribe(
     (data) => {
       this.categories = data;
     },
@@ -41,12 +41,12 @@ export class MenuComponent implements OnInit {
   );
 
   // Fetch menus
-  this.http.get<any[]>('http://localhost:3000/api/menus/' + this.userId).subscribe(
+  this.http.get<any[]>(`${environment.apiBaseUrl}/api/menus/` + this.userId).subscribe(
     (data) => {
       // Map over the fetched menus and update imageUrl dynamically
       this.menus = data.map(menu => ({
         ...menu,  // Copy the properties of the menu
-        imageUrl: `http://localhost:3000/uploads/${menu.item_image}`  // Prepend the server URL to imageUrl
+        imageUrl: `${environment.apiBaseUrl}/uploads/${menu.item_image}`  // Prepend the server URL to imageUrl
       }));
     },
     (error) => {
@@ -67,7 +67,7 @@ export class MenuComponent implements OnInit {
   addMenu() {
     if (this.addingNewCategory) {
       // เรียก API เพื่อเพิ่มหมวดหมู่ใหม่
-      this.http.post<any>('http://localhost:3000/api/categories', { store_id: this.userId, name: this.newCategory }).subscribe(
+      this.http.post<any>(`${environment.apiBaseUrl}/api/categories`, { store_id: this.userId, name: this.newCategory }).subscribe(
         (response) => {
           const newCategoryId = response.id; // รับ ID ของหมวดหมู่ที่เพิ่มใหม่
           console.log('New category ID:', newCategoryId);
@@ -109,7 +109,7 @@ saveMenu(categoryId: string) {
   formData.append("price", this.newMenu.price);
   formData.append("item_image", this.imageUrl || ''); // Ensure the key matches backend expectations
 
-  const apiUrl = 'http://localhost:3000/api/menus';
+  const apiUrl = `${environment.apiBaseUrl}/api/menus`;
 
   // Perform the API request
   this.http.post<any>(apiUrl, formData).subscribe(
@@ -141,7 +141,7 @@ resetForm() {
 
   DeleteMenu(id: string) {
     if (confirm('คุณต้องการลบหรือไม่?')) {
-      this.http.delete<any>(`http://localhost:3000/api/menus/${id}`).subscribe(
+      this.http.delete<any>(`${environment.apiBaseUrl}/api/menus/${id}`).subscribe(
       (response) => {
 
         const index = this.menus.findIndex((menu) => menu.id === id);
@@ -173,7 +173,7 @@ resetForm() {
   editcategory() {
     if (this.addingNewCategory) {
       // เรียก API เพื่อเพิ่มหมวดหมู่ใหม่
-      this.http.post<any>('http://localhost:3000/api/categories', { store_id: this.userId, name: this.newCategory }).subscribe(
+      this.http.post<any>(`${environment.apiBaseUrl}/api/categories`, { store_id: this.userId, name: this.newCategory }).subscribe(
         (response) => {
           const newCategoryId = response.id; // รับ ID ของหมวดหมู่ที่เพิ่มใหม่
           console.log('New category ID:', newCategoryId);
@@ -192,15 +192,9 @@ resetForm() {
       console.log('Selected category:', this.newMenu.category.category_id);
       const categoryId = this.newMenu.category.category_id;
       this.updateMenu(this.newMenu.category.category_id);
-      // if (selectedCategory) {
-
-      //   console.log('Selected category:', selectedCategory);
-      // }
-      // else {
-      //   alert('กรุณาเลือกหมวดหมู่ที่ถูกต้อง');
-      // }
     }
   }
+  
   updateMenu(id: string) {
     // สร้างข้อมูลสำหรับอัปเดตเมนู
     const formData = new FormData();
@@ -212,7 +206,7 @@ resetForm() {
 
 
     // เรียก API เพื่ออัปเดตเมนู
-    this.http.put<any>(`http://localhost:3000/api/menus/${this.newMenu.id}`,formData).subscribe(
+    this.http.put<any>(`${environment.apiBaseUrl}/api/menus/${this.newMenu.id}`,formData).subscribe(
       (response) => {
         // จัดการกับการตอบกลับเมื่ออัปเดตสำเร็จ
         console.log('Menu updated successfully:', response);

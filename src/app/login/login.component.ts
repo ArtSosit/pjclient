@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-
+import { environment } from '@env/environment';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -12,7 +12,7 @@ export class LoginComponent implements OnInit {
   password: string = '';
   loginError: string | null = null;
 
-  private apiUrl = 'http://localhost:3000/api/auth/login'; // URL ของ API ที่คุณใช้
+  private apiUrl = `${environment.apiBaseUrl}/api/auth/login`; // URL ของ API ที่คุณใช้
 
   constructor(private http: HttpClient, private router: Router) { }
   

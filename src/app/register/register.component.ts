@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth.service';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-
+import { environment } from '@env/environment';
 
 
 @Component({
@@ -55,7 +55,7 @@ export class RegisterComponent implements OnInit{
       return;
     }
 
-    this.http.post("http://localhost:3000/api/auth/login", this.auth).subscribe(
+    this.http.post(`${environment.apiBaseUrl}/api/auth/login`, this.auth).subscribe(
       (response: any) => {
         console.log('Login response:', response);
         // Check the success flag in the response
@@ -125,7 +125,7 @@ formData.forEach((value, key) => {
   console.log(`${key}:`, value);
 });
 
-  this.http.put('http://localhost:3000/api/stores/additional-info', formData).subscribe(
+  this.http.put(`${environment.apiBaseUrl}/api/stores/additional-info`, formData).subscribe(
     (response: any) => {
       console.log('Data added successfully:', response);
       this.router.navigate(['/main/menu']);

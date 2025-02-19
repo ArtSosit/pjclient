@@ -1,6 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { environment } from '@env/environment';
+
 @Component({
   selector: 'app-customer-menus',
   templateUrl: './customer-menus.component.html',
@@ -29,7 +31,7 @@ export class CustomerMenusComponent implements OnInit {
 
   fetchMenus(): void {
 
-    this.http.get<any[]>('http://localhost:3000/api/stores/'+this.storeId).subscribe(
+    this.http.get<any[]>(`${environment.apiBaseUrl}/api/stores/`+this.storeId).subscribe(
       (response) => {
         this.store = response; // เก็บข้อมูลใน main
         console.log('Menus :', this.store); // แสดงข้อมูลใน console
@@ -39,7 +41,7 @@ export class CustomerMenusComponent implements OnInit {
       }
     );
 
-    this.http.get<any[]>('http://localhost:3000/api/tables/' + this.storeId).subscribe({
+    this.http.get<any[]>(`${environment.apiBaseUrl}/api/tables/` + this.storeId).subscribe({
     next: (data) => {
       console.log('Fetched tables data1:', data); // ตรวจสอบข้อมูลที่ได้รับจาก API
 

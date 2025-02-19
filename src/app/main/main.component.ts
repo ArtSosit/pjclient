@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router'; // นำเข้า Router เพื่อทำการรีไดเรกต์
-
+import { environment } from '@env/environment';
 @Component({
   selector: 'app-main',
   templateUrl: './main.component.html',
@@ -11,7 +11,7 @@ export class MainComponent implements OnInit {
   store: any = {};
 
   userId: string | null = null; // เพิ่มตัวแปรสำหรับเก็บ userId
-  private apiUrl = 'http://localhost:3000/api/stores/'; // URL ของ API สำหรับดึงข้อมูลร้านค้า
+  private apiUrl = `${environment.apiBaseUrl}/api/stores/`; // URL ของ API สำหรับดึงข้อมูลร้านค้า
   imageUrl: string | null= null;
 
   constructor(private http: HttpClient, private router: Router) {}
@@ -42,7 +42,7 @@ export class MainComponent implements OnInit {
       (response) => {
         this.store = response; // เก็บข้อมูลใน main
         console.log('Menus fetched:', this.store); // แสดงข้อมูลใน console
-        this.imageUrl = `http://localhost:3000/uploads/${this.store.store_image}`;  
+        this.imageUrl = `${environment.apiBaseUrl}/uploads/${this.store.store_image}`;  
       },
       (error) => {
         console.error('Error fetching menus:', error); // แสดงข้อผิดพลาดใน console

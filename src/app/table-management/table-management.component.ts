@@ -3,6 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { QRCodeModule } from 'angularx-qrcode';
 import { SafeUrl } from '@angular/platform-browser';
 import { Router } from '@angular/router';
+import { environment } from '@env/environment';
+
 @Component({
   selector: 'app-table-management',
   templateUrl: './table-management.component.html',
@@ -15,7 +17,7 @@ export class TableManagementComponent implements OnInit {
   constructor(private https: HttpClient, private router: Router) { }
   ngOnInit(): void {
   this.userId = localStorage.getItem('userId');
-    this.https.get < any[]>('http://localhost:3000/api/tables/'+this.userId).subscribe(data => {
+    this.https.get < any[]>(`${environment.apiBaseUrl}/api/tables/`+this.userId).subscribe(data => {
       this.tables = data;
       console.log('Tables:', this.tables);
     });
@@ -24,7 +26,7 @@ export class TableManagementComponent implements OnInit {
     // Validate the new table data
 
     // if (this.newTable.table_number && this.newTable.table_qr) {
-      this.https.post<any>('http://localhost:3000/api/tables/', {
+      this.https.post<any>(`${environment.apiBaseUrl}/api/tables/`, {
         userId: this.userId,
         table_number: this.newTable.table_number,
       }).subscribe(
@@ -44,7 +46,7 @@ export class TableManagementComponent implements OnInit {
   removeTable(tableId: number) {
     if (confirm('ต้องการลบโต๊ะนี้ใช่มั้ย')) {
       console.log(tableId);
-      this.https.delete('http://localhost:3000/api/tables/' + tableId).subscribe(() => {
+      this.https.delete(`${environment.apiBaseUrl}/api/tables/` + tableId).subscribe(() => {
         this.tables = this.tables.filter(table => table.id !== tableId);
         location.reload();
       });
