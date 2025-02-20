@@ -19,7 +19,6 @@ export class PaymentComponent implements OnInit {
 
   getOrders(): void {
     this.userId = localStorage.getItem('userId');
-    // ตรวจสอบว่า userId มีอยู่ใน localStorage หรือไม่
     this.userId = localStorage.getItem('userId');
 
     if (!this.userId) {
@@ -33,10 +32,6 @@ export class PaymentComponent implements OnInit {
     this.http.get<any[]>(`${environment.apiBaseUrl}/api/orders/paid/` + this.userId).subscribe({
       next: (data) => {
         this.orders = data; // เก็บข้อมูลที่ได้จาก API
-        this.orders = data.map(order => ({
-          ...order,  // Copy the properties of the menu
-          imageUrl: `${environment.apiBaseUrl}/uploads/${order.proof}`  // Prepend the server URL to imageUrl
-        }));
         console.log('Fetched orders:', this.orders); // แสดงผลลัพธ์ที่ได้จาก API
       },
       error: (error) => {
@@ -44,4 +39,28 @@ export class PaymentComponent implements OnInit {
       }
     });
   }
+
+  viewSlip(proof: string) {
+    if (!proof || proof.trim() === '') {
+      console.warn("ไม่มีสลิปให้แสดง");
+      return;
+    }
+
+    const imageUrl = `${environment.apiBaseUrl}/uploads/${proof}`;
+    window.open(imageUrl, "_blank"); // เปิดสลิปในหน้าต่างใหม่
+  }
+
+  paidConfirm(id: number) {
+    this.http.put<any>(`${environment.apiBaseUrl}/api/orders/complete-paid/${id}`, {}).subscribe({
+      next: (data) => {
+        console.log("✅ ชำระเงินสำเร็จ", data);
+        alert("ออเดอร์ #" + id + " ได้รับการยืนยันการชำระเงินแล้ว!");
+      },
+      error: (error) => {
+        console.error("❌ เกิดข้อผิดพลาดในการอัปเดตสถานะ:", error);
+        alert("เกิดข้อผิดพลาดในการยืนยันการชำระเงิน");
+      }
+    });
+  }
+
 }

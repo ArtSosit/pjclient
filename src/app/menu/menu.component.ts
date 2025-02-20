@@ -7,7 +7,7 @@ import { environment } from '@env/environment';
   styleUrls: ['./menu.component.css']
 })
 export class MenuComponent implements OnInit {
-  
+
   menus: any[] = [];
   userId: string | null = null;
   categories: any[] = [];
@@ -17,43 +17,46 @@ export class MenuComponent implements OnInit {
   showModal: boolean = false;
   editModal: boolean = false;
   imageUrl: File | null = null;
+  isChecked: boolean = true;
+
   constructor(private http: HttpClient) { }
 
   ngOnInit(): void {
     // ดึงข้อมูลจากไฟล์ JSON หรือ API
     this.fetchMenus();
-    
 
-    
+
+
   }
   fetchMenus(): void {
-  // Retrieve the userId from localStorage
-  this.userId = localStorage.getItem('userId');
+    // Retrieve the userId from localStorage
+    this.userId = localStorage.getItem('userId');
 
-  // Fetch categories
-  this.http.get<any[]>(`${environment.apiBaseUrl}/api/categories/` + this.userId).subscribe(
-    (data) => {
-      this.categories = data;
-    },
-    (error) => {
-      console.error('Error loading categories:', error);
-    }
-  );
+    // Fetch categories
+    this.http.get<any[]>(`${environment.apiBaseUrl}/api/categories/` + this.userId).subscribe(
+      (data) => {
+        this.categories = data;
+      },
+      (error) => {
+        console.error('Error loading categories:', error);
+      }
+    );
 
-  // Fetch menus
-  this.http.get<any[]>(`${environment.apiBaseUrl}/api/menus/` + this.userId).subscribe(
-    (data) => {
-      // Map over the fetched menus and update imageUrl dynamically
-      this.menus = data.map(menu => ({
-        ...menu,  // Copy the properties of the menu
-        imageUrl: `${environment.apiBaseUrl}/uploads/${menu.item_image}`  // Prepend the server URL to imageUrl
-      }));
-    },
-    (error) => {
-      console.error('Error loading menu items:', error);
-    }
-  );
-}
+    // Fetch menus
+    this.http.get<any[]>(`${environment.apiBaseUrl}/api/menus/` + this.userId).subscribe(
+      (data) => {
+        // Map over the fetched menus and update imageUrl dynamically
+        console.log(data)
+        this.menus = data.map(menu => ({
+          ...menu,  // Copy the properties of the menu
+          imageUrl: `${environment.apiBaseUrl}/uploads/${menu.item_image}`  // Prepend the server URL to imageUrl
+        }));
+      },
+      (error) => {
+        console.error('Error loading menu items:', error);
+      }
+    );
+  }
 
   checkCategory(event: any) {
     // เช็คว่าผู้ใช้เลือก "เพิ่มหมวดหมู่ใหม่" หรือไม่
@@ -95,66 +98,67 @@ export class MenuComponent implements OnInit {
       // }
     }
   }
-saveMenu(categoryId: string) {
-  // Validate input
-  if (!categoryId || !this.newMenu.name || !this.newMenu.price) {
-    alert('กรุณากรอกข้อมูลให้ครบถ้วน');
-    return;
+  saveMenu(categoryId: string) {
+    // Validate input
+    if (!categoryId || !this.newMenu.name || !this.newMenu.price) {
+      alert('กรุณากรอกข้อมูลให้ครบถ้วน');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("category_id", categoryId);
+    formData.append("store_id", this.userId || '');
+    formData.append("name", this.newMenu.name);
+    formData.append("price", this.newMenu.price);
+    formData.append("item_image", this.imageUrl || ''); // Ensure the key matches backend expectations
+
+    const apiUrl = `${environment.apiBaseUrl}/api/menus`;
+
+    // Perform the API request
+    this.http.post<any>(apiUrl, formData).subscribe(
+      (response) => {
+        // Update the menus array with the new menu item
+        this.menus.push(response);
+        // Reset the form
+        this.newMenu = { name: '', price: 0, category: '', imageUrl: '' };
+        this.newCategory = ''; // Reset the new category
+        this.addingNewCategory = false; // Close the "add new category" mode
+        this.showModal = false; // Close the modal
+        location.reload(); // Optionally refresh the page to reflect changes
+      },
+      (error) => {
+        console.error('Error adding new menu:', error);
+        alert('เกิดข้อผิดพลาดในการเพิ่มเมนูใหม่ โปรดลองอีกครั้ง');
+      }
+    );
   }
 
-  const formData = new FormData();
-  formData.append("category_id", categoryId);
-  formData.append("store_id", this.userId || '');
-  formData.append("name", this.newMenu.name);
-  formData.append("price", this.newMenu.price);
-  formData.append("item_image", this.imageUrl || ''); // Ensure the key matches backend expectations
 
-  const apiUrl = `${environment.apiBaseUrl}/api/menus`;
-
-  // Perform the API request
-  this.http.post<any>(apiUrl, formData).subscribe(
-    (response) => {
-      // Update the menus array with the new menu item
-      this.menus.push(response);
-      // Reset the form
-      this.newMenu = { name: '', price: 0, category: '', imageUrl: '' };
-      this.newCategory = ''; // Reset the new category
-      this.addingNewCategory = false; // Close the "add new category" mode
-      this.showModal = false; // Close the modal
-      location.reload(); // Optionally refresh the page to reflect changes
-    },
-    (error) => {
-      console.error('Error adding new menu:', error);
-      alert('เกิดข้อผิดพลาดในการเพิ่มเมนูใหม่ โปรดลองอีกครั้ง');
-    }
-  );
-}
-
-
-resetForm() {
-  this.newMenu = { name: '', price: 0, category: '', imageUrl: '' };
-  this.newCategory = '';
-  this.addingNewCategory = false;
-  this.showModal = false;
-}
+  resetForm() {
+    this.newMenu = { name: '', price: 0, category: '', imageUrl: '' };
+    this.newCategory = '';
+    this.addingNewCategory = false;
+    this.showModal = false;
+  }
 
 
   DeleteMenu(id: string) {
     if (confirm('คุณต้องการลบหรือไม่?')) {
       this.http.delete<any>(`${environment.apiBaseUrl}/api/menus/${id}`).subscribe(
-      (response) => {
+        (response) => {
 
-        const index = this.menus.findIndex((menu) => menu.id === id);
-        if (index !== -1) {
-          this.menus.splice(index, 1);
+          const index = this.menus.findIndex((menu) => menu.id === id);
+          if (index !== -1) {
+            this.menus.splice(index, 1);
+          }
+          location.reload()
+        },
+        (error) => {
+          console.error('Error deleting menu:', error);
         }
-        location.reload()
-      },
-      (error) => {
-        console.error('Error deleting menu:', error);
-      }
-    );}
-    
+      );
+    }
+
   }
   editMenu(menu: any) {
     this.newMenu = {
@@ -194,7 +198,7 @@ resetForm() {
       this.updateMenu(this.newMenu.category.category_id);
     }
   }
-  
+
   updateMenu(id: string) {
     // สร้างข้อมูลสำหรับอัปเดตเมนู
     const formData = new FormData();
@@ -202,11 +206,11 @@ resetForm() {
     formData.append('store_id', this.userId || '');
     formData.append('name', this.newMenu.name);
     formData.append('price', this.newMenu.price.toString());
-    formData.append("item_image", this.imageUrl || ''); 
+    formData.append("item_image", this.imageUrl || '');
 
 
     // เรียก API เพื่ออัปเดตเมนู
-    this.http.put<any>(`${environment.apiBaseUrl}/api/menus/${this.newMenu.id}`,formData).subscribe(
+    this.http.put<any>(`${environment.apiBaseUrl}/api/menus/${this.newMenu.id}`, formData).subscribe(
       (response) => {
         // จัดการกับการตอบกลับเมื่ออัปเดตสำเร็จ
         console.log('Menu updated successfully:', response);
@@ -236,4 +240,28 @@ resetForm() {
       console.log(`${fileType} selected:`, file);
     }
   }
+
+
+  // ใน TypeScript (Component)
+  menu = { status: 'available' }; // ตัวอย่างค่าเริ่มต้น
+  toggleStatus(id: number) {
+    const newStatus = this.menu.status === "available" ? "unavailable" : "available";
+
+    const formData = new FormData();
+    formData.append("menuId", id.toString()); // ✅ ต้องเป็น string
+    formData.append("status", newStatus);
+
+    // console.log("📤 Sending FormData:", [...formData.entries()]); // ✅ Debug ค่าที่ส่ง
+
+    this.http
+      .post(`${environment.apiBaseUrl}/api/menus/status`, formData)
+      .subscribe({
+        next: (res) => console.log("✅ Success:", res),
+        error: (err) => console.error("❌ Error:", err),
+      });
+  }
+
+
+
+
 }

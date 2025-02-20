@@ -22,13 +22,16 @@
     <div class="order-summary">
       <span>รวม {{ order.totalPrice }} บาท</span>
       <button
-        class="btn-slip btn-danger"
+        class="btn btn-danger"
         [ngClass]="{ disabled: !order.proof || order.proof.trim() === '' }"
+        (click)="viewSlip(order.proof)"
       >
         ดูสลิป
       </button>
 
-      <button class="btn-confirm-payment">ยืนยันการชำระเงิน</button>
+      <button class="btn btn-success" (click)="paidConfirm(order.order)">
+        ยืนยันการชำระเงิน
+      </button>
     </div>
   </div>
 </div>
