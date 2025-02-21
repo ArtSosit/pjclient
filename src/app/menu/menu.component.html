@@ -5,6 +5,56 @@
     เพิ่มรายการอาหาร
   </button>
 </div>
+<div>
+  <label for="cate">หมวดหมู่</label>
+  <select class="form-select" id="categories" [(ngModel)]="selectedcate">
+    <option value="all">ทั้งหมด</option>
+    <option
+      *ngFor="let category of categories"
+      [value]="category.category_name"
+    >
+      {{ category.category_name }}
+    </option>
+  </select>
+</div>
+
+<div class="menu-container">
+  <div class="menu-card" *ngFor="let menu of filteredMenus()">
+    <!-- Loop through each menu -->
+    <img src="{{ menu.imageUrl }}" alt="menu-item" class="menu-image" />
+    <!-- Display image -->
+    <div class="menu-content">
+      <div>
+        <h3>{{ menu.item_name }}</h3>
+        <!-- Display the item name -->
+        <p>ราคา {{ menu.price }} บาท</p>
+        <!-- Display the price -->
+        <p>หมวดหมู่: {{ menu.category }}</p>
+        <!-- Display the category -->
+      </div>
+      <div class="form-check form-switch">
+        <input
+          class="form-check-input"
+          type="checkbox"
+          role="switch"
+          id="flexSwitchCheckDefault"
+          [checked]="menu.status === 'available'"
+          (change)="toggleStatus(menu.item_id)"
+        />
+        <label class="form-check-label" for="flexSwitchCheckDefault">
+          {{ menu.status === "available" ? "ON" : "OFF" }}
+        </label>
+      </div>
+
+      <div>
+        <button class="btn btn-danger" (click)="DeleteMenu(menu.item_id)">
+          ลบ
+        </button>
+        <button class="btn btn-success" (click)="editMenu(menu)">แก้ไข</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- Modal ที่จะแสดงเมื่อ showModal เป็น true -->
 <div *ngIf="showModal" class="modal-backdrop">
@@ -78,47 +128,6 @@
     <div class="modal-footer">
       <button class="btn btn-secondary" (click)="clearMenu()">ปิด</button>
       <button class="btn btn-primary" (click)="addMenu()">เพิ่มรายการ</button>
-    </div>
-  </div>
-</div>
-
-<div class="menu-container">
-  <div class="menu-card" *ngFor="let menu of menus">
-    <!-- Loop through each menu -->
-    <img src="{{ menu.imageUrl }}" alt="menu-item" class="menu-image" />
-    <!-- Display image -->
-    <div class="menu-content">
-      <div>
-        <h3>{{ menu.item_name }}</h3>
-        <!-- Display the item name -->
-        <p>ราคา {{ menu.price }} บาท</p>
-        <!-- Display the price -->
-        <p>หมวดหมู่: {{ menu.category }}</p>
-        <!-- Display the category -->
-      </div>
-      <div class="form-check form-switch">
-        <input
-          class="form-check-input"
-          type="checkbox"
-          role="switch"
-          id="flexSwitchCheckDefault"
-          [checked]="menu.status === 'available'"
-          (change)="toggleStatus(menu.item_id)"
-        />
-        <label class="form-check-label" for="flexSwitchCheckDefault">
-          {{ menu.status === "available" ? "ON" : "OFF" }}
-        </label>
-      </div>
-
-      <div>
-        <!-- Button to delete the menu item -->
-        <button class="btn btn-danger" (click)="DeleteMenu(menu.item_id)">
-          ลบ
-        </button>
-
-        <!-- Button to edit the menu item -->
-        <button class="btn btn-success" (click)="editMenu(menu)">แก้ไข</button>
-      </div>
     </div>
   </div>
 </div>

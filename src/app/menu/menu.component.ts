@@ -18,15 +18,12 @@ export class MenuComponent implements OnInit {
   editModal: boolean = false;
   imageUrl: File | null = null;
   isChecked: boolean = true;
+  selectedcate: string = "all";
 
   constructor(private http: HttpClient) { }
 
   ngOnInit(): void {
-    // ดึงข้อมูลจากไฟล์ JSON หรือ API
     this.fetchMenus();
-
-
-
   }
   fetchMenus(): void {
     // Retrieve the userId from localStorage
@@ -36,6 +33,7 @@ export class MenuComponent implements OnInit {
     this.http.get<any[]>(`${environment.apiBaseUrl}/api/categories/` + this.userId).subscribe(
       (data) => {
         this.categories = data;
+        console.log("cate", this.categories)
       },
       (error) => {
         console.error('Error loading categories:', error);
@@ -69,15 +67,11 @@ export class MenuComponent implements OnInit {
 
   addMenu() {
     if (this.addingNewCategory) {
-      // เรียก API เพื่อเพิ่มหมวดหมู่ใหม่
       this.http.post<any>(`${environment.apiBaseUrl}/api/categories`, { store_id: this.userId, name: this.newCategory }).subscribe(
         (response) => {
-          const newCategoryId = response.id; // รับ ID ของหมวดหมู่ที่เพิ่มใหม่
+          const newCategoryId = response.id;
           console.log('New category ID:', newCategoryId);
-          // เพิ่มเมนูใหม่พร้อมกับใช้ ID ของหมวดหมู่ที่เพิ่มใหม่
           this.saveMenu(newCategoryId);
-
-          // รีเซ็ตหมวดหมู่ใหม่
           this.newCategory = '';
         },
         (error) => {
@@ -85,17 +79,9 @@ export class MenuComponent implements OnInit {
         }
       );
     } else {
-      // ใช้หมวดหมู่ที่เลือกจาก dropdown (ไม่ใช่หมวดหมู่ใหม่)
       console.log('Selected category:', this.newMenu.category.category_id);
       const categoryId = this.newMenu.category.category_id;
       this.saveMenu(this.newMenu.category.category_id);
-      // if (selectedCategory) {
-
-      //   console.log('Selected category:', selectedCategory);
-      // }
-      // else {
-      //   alert('กรุณาเลือกหมวดหมู่ที่ถูกต้อง');
-      // }
     }
   }
   saveMenu(categoryId: string) {
@@ -104,7 +90,6 @@ export class MenuComponent implements OnInit {
       alert('กรุณากรอกข้อมูลให้ครบถ้วน');
       return;
     }
-
     const formData = new FormData();
     formData.append("category_id", categoryId);
     formData.append("store_id", this.userId || '');
@@ -114,16 +99,11 @@ export class MenuComponent implements OnInit {
 
     const apiUrl = `${environment.apiBaseUrl}/api/menus`;
 
-    // Perform the API request
     this.http.post<any>(apiUrl, formData).subscribe(
       (response) => {
         // Update the menus array with the new menu item
         this.menus.push(response);
-        // Reset the form
-        this.newMenu = { name: '', price: 0, category: '', imageUrl: '' };
-        this.newCategory = ''; // Reset the new category
-        this.addingNewCategory = false; // Close the "add new category" mode
-        this.showModal = false; // Close the modal
+        this.resetForm();
         location.reload(); // Optionally refresh the page to reflect changes
       },
       (error) => {
@@ -240,25 +220,36 @@ export class MenuComponent implements OnInit {
       console.log(`${fileType} selected:`, file);
     }
   }
-
-
-  // ใน TypeScript (Component)
-  menu = { status: 'available' }; // ตัวอย่างค่าเริ่มต้น
+  menu = { status: '' };
   toggleStatus(id: number) {
-    const newStatus = this.menu.status === "available" ? "unavailable" : "available";
+    const menuItem = this.menus.find(menu => menu.item_id === id);
+    if (!menuItem) return;
 
+    // เปลี่ยนค่าใน UI ก่อน
+    menuItem.status = menuItem.status === "available" ? "unavailable" : "available";
+
+    // สร้างข้อมูลเพื่อส่งไปอัปเดตเซิร์ฟเวอร์
     const formData = new FormData();
-    formData.append("menuId", id.toString()); // ✅ ต้องเป็น string
-    formData.append("status", newStatus);
+    formData.append("menuId", id.toString());
+    formData.append("status", menuItem.status);
 
-    // console.log("📤 Sending FormData:", [...formData.entries()]); // ✅ Debug ค่าที่ส่ง
-
-    this.http
-      .post(`${environment.apiBaseUrl}/api/menus/status`, formData)
+    this.http.post(`${environment.apiBaseUrl}/api/menus/status`, formData)
       .subscribe({
-        next: (res) => console.log("✅ Success:", res),
-        error: (err) => console.error("❌ Error:", err),
+        next: (res) => console.log("✅ Status updated:", res),
+        error: (err) => {
+          console.error("❌ Error:", err);
+          // ถ้าเกิด error ให้เปลี่ยนค่า status กลับ
+          menuItem.status = menuItem.status === "available" ? "unavailable" : "available";
+        }
       });
+  }
+
+  filteredMenus() {
+    if (this.selectedcate === "all") {
+      return this.menus;
+    }
+    console.log(this.selectedcate)
+    return this.menus.filter((menu) => menu.category === this.selectedcate);
   }
 
 
