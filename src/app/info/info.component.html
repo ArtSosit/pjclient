@@ -72,6 +72,10 @@
       </div>
       <div class="modal-body">
         <form id="editForm">
+          <div class="input-group mb-3">
+            <label class="input-group-text" for="profileimg">รูปภาพ</label>
+            <input type="file" class="form-control" id="profileimg" />
+          </div>
           <div class="mb-3">
             <label for="editName" class="form-label">ชื่อร้าน</label>
             <input
@@ -107,6 +111,12 @@
               class="form-control"
               value="{{ store.promptpay_number }}"
             />
+          </div>
+          <div class="input-group mb-3">
+            <label class="input-group-text" for="promptpay"
+              >รูปภาพ PromptPay</label
+            >
+            <input type="file" class="form-control" id="promptpay" />
           </div>
           <div class="mb-3">
             <label for="editOpenTime" class="form-label">เวลาเปิด</label>

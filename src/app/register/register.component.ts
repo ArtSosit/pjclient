@@ -10,7 +10,7 @@ import { environment } from '@env/environment';
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
 })
-export class RegisterComponent implements OnInit{
+export class RegisterComponent implements OnInit {
   isRegistered = false;
   user = {
     userID: '',
@@ -34,23 +34,23 @@ export class RegisterComponent implements OnInit{
   storeImage: File | null = null;
   promptpayImage: File | null = null;
   imagePreview: string | ArrayBuffer | null = null;
-  
+
   constructor(private authService: AuthService, private http: HttpClient, private router: Router) { }
   ngOnInit(): void {
     const storedEmail = localStorage.getItem('email');
     const storedPassword = localStorage.getItem('password');
-  
+
     if (storedEmail && storedPassword) {
       // ถ้ามีข้อมูลให้ทำการล็อกอินอัตโนมัติ
-     
+
       this.auth.email = storedEmail;
       this.auth.password = storedPassword;
-      this.onSubmit(this.auth.email,this.auth.password); // เรียกฟังก์ชัน onSubmit() เพื่อล็อกอิน
+      this.onSubmit(this.auth.email, this.auth.password); // เรียกฟังก์ชัน onSubmit() เพื่อล็อกอิน
     }
   }
 
-  onSubmit(email: string,password: string) {
-  if (!email || !password) {
+  onSubmit(email: string, password: string) {
+    if (!email || !password) {
       this.loginError = 'Please enter both email and password.';
       return;
     }
@@ -61,12 +61,12 @@ export class RegisterComponent implements OnInit{
         // Check the success flag in the response
         if (response) {
           console.log('Login successful:', response);
-          
+
           // เก็บ userId และข้อมูลการล็อกอินใน localStorage
           localStorage.setItem('userId', response.userId);
-          localStorage.setItem('email', this.auth.email); 
+          localStorage.setItem('email', this.auth.email);
           localStorage.setItem('password', this.auth.password);
-          
+
           // Redirect after successful login
           this.router.navigate(['/main/menu']);
         } else {
@@ -79,7 +79,7 @@ export class RegisterComponent implements OnInit{
         this.loginError = 'An error occurred during login. Please try again later.';
       }
     );
-}
+  }
 
   onRegister() {
     this.authService.register(this.user).subscribe(
@@ -98,43 +98,43 @@ export class RegisterComponent implements OnInit{
     this.isRegistered = true;
   }
   onSubmitAdditionalInfo() {
-  const formData = new FormData();
-  console.log('User:', this.user);
+    const formData = new FormData();
+    console.log('User:', this.user);
 
-  formData.append('userID', localStorage.getItem('userId') || '');
-  formData.append('storeName', this.user.storeName);
-  formData.append('storeDetails', this.user.storeDetails);
-  formData.append('contactInfo', this.user.contactInfo);
-  formData.append('promptpay', this.user.promptpay);
-  formData.append('openTime', this.user.openTime);
-  formData.append('closeTime', this.user.closeTime);
+    formData.append('userID', localStorage.getItem('userId') || '');
+    formData.append('storeName', this.user.storeName);
+    formData.append('storeDetails', this.user.storeDetails);
+    formData.append('contactInfo', this.user.contactInfo);
+    formData.append('promptpay', this.user.promptpay);
+    formData.append('openTime', this.user.openTime);
+    formData.append('closeTime', this.user.closeTime);
 
-  if (this.storeImage) {
-    formData.append('storeImage', this.storeImage, this.storeImage.name);
-  } else {
-    console.warn('No store image selected');
-  }
-
-  if (this.promptpayImage) {
-    formData.append('promptpayimage', this.promptpayImage, this.promptpayImage.name);
-  } else {
-    console.warn('No promptpay image selected');
-  }
-
-formData.forEach((value, key) => {
-  console.log(`${key}:`, value);
-});
-
-  this.http.put(`${environment.apiBaseUrl}/api/stores/additional-info`, formData).subscribe(
-    (response: any) => {
-      console.log('Data added successfully:', response);
-      this.router.navigate(['/main/menu']);
-    },
-    (error: any) => {
-      console.error('Error adding data:', error);
+    if (this.storeImage) {
+      formData.append('storeImage', this.storeImage, this.storeImage.name);
+    } else {
+      console.warn('No store image selected');
     }
-  );
-}
+
+    if (this.promptpayImage) {
+      formData.append('promptpayimage', this.promptpayImage, this.promptpayImage.name);
+    } else {
+      console.warn('No promptpay image selected');
+    }
+
+    formData.forEach((value, key) => {
+      console.log(`${key}:`, value);
+    });
+
+    this.http.put(`${environment.apiBaseUrl}/api/stores/additional-info`, formData).subscribe(
+      (response: any) => {
+        console.log('Data added successfully:', response);
+        this.router.navigate(['/main/menu']);
+      },
+      (error: any) => {
+        console.error('Error adding data:', error);
+      }
+    );
+  }
 
   // Handler for file input change
   onFileChange(event: any, fileType: 'storeImage' | 'promptpayImage') {

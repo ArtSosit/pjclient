@@ -44,7 +44,7 @@ export class MenuComponent implements OnInit {
     this.http.get<any[]>(`${environment.apiBaseUrl}/api/menus/` + this.userId).subscribe(
       (data) => {
         // Map over the fetched menus and update imageUrl dynamically
-        console.log(data)
+        // console.log(data)
         this.menus = data.map(menu => ({
           ...menu,  // Copy the properties of the menu
           imageUrl: `${environment.apiBaseUrl}/uploads/${menu.item_image}`  // Prepend the server URL to imageUrl
@@ -251,8 +251,5 @@ export class MenuComponent implements OnInit {
     console.log(this.selectedcate)
     return this.menus.filter((menu) => menu.category === this.selectedcate);
   }
-
-
-
 
 }
