@@ -22,10 +22,13 @@
     "@cordobo/qrcode": "^1.5.0",
     "angularx-qrcode": "^18.0.2",
     "bootstrap": "^5.3.3",
+    "bootstrap-icons": "^1.11.3",
     "primeicons": "^7.0.0",
     "primeng": "^17.18.8",
     "qrcode": "^1.5.4",
     "rxjs": "~7.8.0",
+    "socket.io": "^4.8.1",
+    "socket.io-client": "^4.8.1",
     "tslib": "^1.14.1",
     "zone.js": "~0.14.3"
   },

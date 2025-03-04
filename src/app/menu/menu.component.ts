@@ -44,7 +44,7 @@ export class MenuComponent implements OnInit {
     this.http.get<any[]>(`${environment.apiBaseUrl}/api/menus/` + this.userId).subscribe(
       (data) => {
         // Map over the fetched menus and update imageUrl dynamically
-        // console.log(data)
+        console.log("food", data)
         this.menus = data.map(menu => ({
           ...menu,  // Copy the properties of the menu
           imageUrl: `${environment.apiBaseUrl}/uploads/${menu.item_image}`  // Prepend the server URL to imageUrl
@@ -251,5 +251,34 @@ export class MenuComponent implements OnInit {
     console.log(this.selectedcate)
     return this.menus.filter((menu) => menu.category === this.selectedcate);
   }
+
+  toggleRecommended(itemId: number, isRecommended: number) {
+    // สลับค่า recommended (1 -> 0, 0 -> 1)
+    const newStatus = isRecommended === 1 ? 0 : 1;
+
+    console.log("🔄 กำลังอัปเดต recommended:", newStatus);
+
+    this.http
+      .put(`http://localhost:3000/api/menus/recommend/${itemId}`, { recommended: newStatus })
+      .subscribe({
+        next: (response: any) => {
+          console.log("✅ อัปเดตสำเร็จ:", response.message);
+
+          // อัปเดตค่าใน UI (สมมติว่า this.menus มีข้อมูลที่ดึงมาแล้ว)
+          const menu = this.menus.find((m) => m.item_id === itemId);
+          if (menu) {
+            menu.is_recommended = newStatus;
+          }
+        },
+        error: (err) => {
+          console.error("❌ เกิดข้อผิดพลาด:", err);
+        },
+      });
+  }
+  getDiscountedPrice(price: number, discount: number): number {
+    return price - discount;
+  }
+
+
 
 }

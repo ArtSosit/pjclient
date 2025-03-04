@@ -1,15 +1,15 @@
 <div class="container mt-5">
   <div class="card text-center p-4 shadow">
     <h3 class="mb-3">ข้อมูลร้าน</h3>
-    <img
-      src="{{ img }}"
-      alt="profile"
-      class="rounded-circle mt-2 mb-3"
-      width="100"
-      height="100"
-    />
-
     <div id="info">
+      <img
+        src="{{ store.store_image }}"
+        alt="profile"
+        class="rounded-circle mt-2 mb-3"
+        width="100"
+        height="100"
+      />
+
       <p>
         <strong>ชื่อ:</strong> <span id="name">{{ store.store_name }}</span>
       </p>
@@ -25,7 +25,7 @@
         <span id="promptpay">{{ store.promptpay_number }}</span>
       </p>
       <img
-        src="your-qr-code-url.jpg"
+        src="{{ store.promptpay_qr }}"
         alt="PromptPay QR"
         class="img-fluid rounded shadow my-2"
         width="120"
@@ -38,13 +38,17 @@
       <p class="mb-3">
         <strong>ติดต่อ:</strong> <span id="contact">{{ store.contact }}</span>
       </p>
+      <p class="mb-3">
+        <strong>รายละเอียด:</strong>
+        <span id="contact">{{ store.details }}</span>
+      </p>
     </div>
 
-    <!-- ปุ่มเปิด Modal -->
     <button
       class="btn btn-outline-primary"
       data-bs-toggle="modal"
       data-bs-target="#editModal"
+      (click)="edit()"
     >
       <i class="bi bi-pencil-square"></i> แก้ไขข้อมูล
     </button>
@@ -74,49 +78,58 @@
         <form id="editForm">
           <div class="input-group mb-3">
             <label class="input-group-text" for="profileimg">รูปภาพ</label>
-            <input type="file" class="form-control" id="profileimg" />
+            <input
+              type="file"
+              class="form-control"
+              id="profileimg"
+              name="store_image"
+              (change)="onFileChange($event, 'storeImage')"
+            />
           </div>
+
           <div class="mb-3">
             <label for="editName" class="form-label">ชื่อร้าน</label>
             <input
               type="text"
               id="editName"
               class="form-control"
-              value="{{ store.store_name }}"
+              [(ngModel)]="editStore.store_name"
+              name="store_name"
             />
           </div>
-          <div class="mb-3">
-            <label for="editUsername" class="form-label">Username</label>
-            <input
-              type="text"
-              id="editUsername"
-              class="form-control"
-              value="{{ store.username }}"
-            />
-          </div>
+
           <div class="mb-3">
             <label for="editEmail" class="form-label">Email</label>
             <input
               type="email"
               id="editEmail"
               class="form-control"
-              value="{{ store.email }}"
+              [(ngModel)]="editStore.email"
+              name="email"
             />
           </div>
+
           <div class="mb-3">
             <label for="editPromptPay" class="form-label">PromptPay</label>
             <input
               type="text"
               id="editPromptPay"
               class="form-control"
-              value="{{ store.promptpay_number }}"
+              [(ngModel)]="editStore.promptpay_number"
+              name="promptpay_number"
             />
           </div>
+
           <div class="input-group mb-3">
             <label class="input-group-text" for="promptpay"
               >รูปภาพ PromptPay</label
             >
-            <input type="file" class="form-control" id="promptpay" />
+            <input
+              type="file"
+              class="form-control"
+              id="promptpay"
+              (change)="onFileChange($event, 'promptpayImage')"
+            />
           </div>
           <div class="mb-3">
             <label for="editOpenTime" class="form-label">เวลาเปิด</label>
@@ -124,25 +137,40 @@
               type="time"
               id="editOpenTime"
               class="form-control"
-              value="{{ store.open_time }}"
+              [(ngModel)]="editStore.open_time"
+              name="open_time"
             />
           </div>
+
           <div class="mb-3">
             <label for="editCloseTime" class="form-label">เวลาปิด</label>
             <input
               type="time"
               id="editCloseTime"
               class="form-control"
-              value="{{ store.close_time }}"
+              [(ngModel)]="editStore.close_time"
+              name="close_time"
             />
           </div>
+
           <div class="mb-3">
             <label for="editContact" class="form-label">เบอร์โทร</label>
             <input
               type="text"
               id="editContact"
               class="form-control"
-              value="{{ store.contact }}"
+              [(ngModel)]="editStore.contact"
+              name="contact"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="editDetail" class="form-label">รายละเอียด </label>
+            <input
+              type="text"
+              id="editContact"
+              class="form-control"
+              [(ngModel)]="editStore.details"
+              name="contact"
             />
           </div>
         </form>
@@ -151,33 +179,15 @@
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
           ยกเลิก
         </button>
-        <button type="button" class="btn btn-success" id="saveChanges">
+        <button
+          type="button"
+          class="btn btn-success"
+          id="saveChanges"
+          (click)="Updateinfo()"
+        >
           บันทึก
         </button>
       </div>
     </div>
   </div>
 </div>
-
-<script>
-  document.getElementById("saveChanges").addEventListener("click", function () {
-    document.getElementById("name").innerText =
-      document.getElementById("editName").value;
-    document.getElementById("username").innerText =
-      document.getElementById("editUsername").value;
-    document.getElementById("email").innerText =
-      document.getElementById("editEmail").value;
-    document.getElementById("promptpay").innerText =
-      document.getElementById("editPromptPay").value;
-    document.getElementById("opentime").innerText =
-      document.getElementById("editOpenTime").value;
-    document.getElementById("closetime").innerText =
-      document.getElementById("editCloseTime").value;
-    document.getElementById("contact").innerText =
-      document.getElementById("editContact").value;
-
-    // ปิด Modal หลังจากบันทึก
-    var editModal = new bootstrap.Modal(document.getElementById("editModal"));
-    editModal.hide();
-  });
-</script>

@@ -1,8 +1,7 @@
-import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { environment } from '@env/environment';
-
+import { HttpClient } from '@angular/common/http';
 
 
 @Component({
@@ -51,56 +50,57 @@ export class CartComponent {
     localStorage.setItem("cart", JSON.stringify(this.cart));
   }
 
- ordering(): void {
-  if (this.cart.length === 0) {
-    alert("ไม่มีสินค้าในตะกร้า");
-    return;
-  }
+  ordering(): void {
+    if (this.cart.length === 0) {
+      alert("ไม่มีสินค้าในตะกร้า");
+      return;
+    }
 
-  const store_id = localStorage.getItem("storeId");
-  const table_id = localStorage.getItem("tableId");
-  let orderId = localStorage.getItem("orderId"); // ✅ ดึง orderId ที่มีอยู่
+    const store_id = localStorage.getItem("storeId");
+    const table_id = localStorage.getItem("tableId");
+    let orderId = localStorage.getItem("orderId"); // ✅ ดึง orderId ที่มีอยู่
 
-  if (!store_id || !table_id) {
-    alert("ข้อมูลร้านหรือโต๊ะไม่ถูกต้อง!");
-    return;
-  }
+    if (!store_id || !table_id) {
+      alert("ข้อมูลร้านหรือโต๊ะไม่ถูกต้อง!");
+      return;
+    }
 
-  const orderData: any = {
-    store_id: store_id,
-    table_id: table_id,
-    items: this.cart
-  };
+    const orderData: any = {
+      store_id: store_id,
+      table_id: table_id,
+      items: this.cart,
+      price: this.cart,
+    };
 
-  // ✅ ถ้ามี orderId อยู่แล้ว ให้ส่งไปด้วย (อัปเดตออเดอร์เดิม)
-  if (orderId) {
-    orderData.order_id = orderId;
-  }
+    // ✅ ถ้ามี orderId อยู่แล้ว ให้ส่งไปด้วย (อัปเดตออเดอร์เดิม)
+    if (orderId) {
+      orderData.order_id = orderId;
+    }
 
-  console.log("📦 ส่งคำสั่งซื้อ:", orderData);
+    console.log("📦 ส่งคำสั่งซื้อ:", orderData);
 
-  this.http.post<{ message: string; orderId: number }>(`${environment.apiBaseUrl}/api/orders/`, orderData)
-    .subscribe({
-      next: (response) => {
-        console.log("✅ คำสั่งซื้อตอบกลับ:", response);
-        
-        // ✅ ถ้าเป็นออเดอร์ใหม่ ให้เก็บ orderId ลง localStorage  
-        if (!orderId) {
-          localStorage.setItem("orderId", response.orderId.toString());
+    this.http.post<{ message: string; orderId: number }>(`${environment.apiBaseUrl}/api/orders/`, orderData)
+      .subscribe({
+        next: (response) => {
+          console.log("✅ คำสั่งซื้อตอบกลับ:", response);
+
+          // ✅ ถ้าเป็นออเดอร์ใหม่ ให้เก็บ orderId ลง localStorage  
+          if (!orderId) {
+            localStorage.setItem("orderId", response.orderId.toString());
+          }
+
+          alert(`✅ สั่งอาหารสำเร็จ!\n หมายเลขออเดอร์: ${response.orderId}`);
+
+          // ล้างตะกร้าหลังสั่งเสร็จ
+          this.cart = [];
+          localStorage.removeItem("cart");
+        },
+        error: (error) => {
+          alert("เกิดข้อผิดพลาดในการสั่งอาหาร");
+          console.error("ERROR:", error);
         }
-
-        alert(`✅ สั่งอาหารสำเร็จ!\n หมายเลขออเดอร์: ${response.orderId}`);
-
-        // ล้างตะกร้าหลังสั่งเสร็จ
-        this.cart = [];
-        localStorage.removeItem("cart");
-      },
-      error: (error) => {
-        alert("เกิดข้อผิดพลาดในการสั่งอาหาร");
-        console.error("ERROR:", error);
-      }
-    });
-}
+      });
+  }
 
 
 

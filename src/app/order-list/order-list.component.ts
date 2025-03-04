@@ -52,7 +52,10 @@ export class OrderListComponent implements OnInit {
   Detail_complate(id: number) {
     this.http.put(`${environment.apiBaseUrl}/api/orders/complateDetail/` + id, { status })
       .subscribe({
-        next: (response) => console.log("Update successful", response),
+        next: (response) => {
+          console.log("Update successful", response);
+
+        },
         error: (err) => console.error("Update failed", err),
       });
   }

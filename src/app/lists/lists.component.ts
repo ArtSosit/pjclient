@@ -16,38 +16,38 @@ export class ListsComponent implements OnInit {
     this.loadList()
   }
 
-loadList() {
-  const orderId = localStorage.getItem("orderId");
-  const storeId = localStorage.getItem("storeId");
+  loadList() {
+    const orderId = localStorage.getItem("orderId");
+    const storeId = localStorage.getItem("storeId");
 
-  if (!orderId || !storeId) {
-    console.warn("ไม่พบ orderId หรือ storeId");
-    return;
-  }
+    if (!orderId || !storeId) {
+      console.warn("ไม่พบ orderId หรือ storeId");
+      return;
+    }
 
-  this.http.get<any>(`${environment.apiBaseUrl}/api/orders/${storeId}/${orderId}`)
-    .subscribe({
-      next: (data) => {
-        console.log("รายการสินค้าในออเดอร์:", data);
-        
-        if (!data || !data.items) {
-          console.warn("ไม่มีรายการสินค้าในออเดอร์");
-          return;
+    this.http.get<any>(`${environment.apiBaseUrl}/api/orders/${storeId}/${orderId}`)
+      .subscribe({
+        next: (data) => {
+          console.log("รายการสินค้าในออเดอร์:", data);
+
+          if (!data || !data.items) {
+            console.warn("ไม่มีรายการสินค้าในออเดอร์");
+            return;
+          }
+
+          this.lists = data; // เก็บข้อมูลทั้งหมดไว้
+          this.lists.items = data.items.map((item: any) => ({
+            ...item,  // คัดลอกข้อมูลเดิมของสินค้า
+            imageUrl: `${environment.apiBaseUrl}/uploads/${item.image || "default.jpg"}`  // ป้องกันภาพที่ไม่มี
+          }));
+
+          console.log("รูปภาพสินค้า:", this.lists.items);
+        },
+        error: (error) => {
+          console.error("โหลดข้อมูลผิดพลาด:", error);
         }
-
-        this.lists = data; // เก็บข้อมูลทั้งหมดไว้
-        this.lists.items = data.items.map((item:any) => ({
-          ...item,  // คัดลอกข้อมูลเดิมของสินค้า
-          imageUrl: `${environment.apiBaseUrl}/uploads/${item.image || "default.jpg"}`  // ป้องกันภาพที่ไม่มี
-        }));
-
-        console.log("รูปภาพสินค้า:", this.lists.items);
-      },
-      error: (error) => {
-        console.error("โหลดข้อมูลผิดพลาด:", error);
-      }
-    });
-}
+      });
+  }
 
 
 

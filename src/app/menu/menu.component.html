@@ -20,18 +20,42 @@
 
 <div class="menu-container">
   <div class="menu-card" *ngFor="let menu of filteredMenus()">
-    <!-- Loop through each menu -->
+    <!-- ⭐ ไอคอนดาว (เมนูแนะนำ) -->
+    <div
+      class="star-icon"
+      [class.active]="menu.is_recommended === 1"
+      (click)="toggleRecommended(menu.item_id, menu.is_recommended)"
+    >
+      <i class="bi bi-star-fill"></i>
+    </div>
+
     <img src="{{ menu.imageUrl }}" alt="menu-item" class="menu-image" />
-    <!-- Display image -->
     <div class="menu-content">
       <div>
         <h3>{{ menu.item_name }}</h3>
-        <!-- Display the item name -->
-        <p>ราคา {{ menu.price }} บาท</p>
-        <!-- Display the price -->
+
+        <!-- แสดงส่วนลดเฉพาะเมนูที่มีส่วนลด -->
+        <p *ngIf="menu.discount > 0" class="discount">
+          ลด {{ menu.discount }} บาท
+        </p>
+
+        <p>
+          ราคา:
+          <span *ngIf="menu.discount > 0" class="original-price">
+            {{ menu.price | number : "1.2-2" }} บาท
+          </span>
+          <span *ngIf="menu.discount > 0" class="discounted-price">
+            {{
+              getDiscountedPrice(menu.price, menu.discount) | number : "1.2-2"
+            }}
+            บาท
+          </span>
+          <span *ngIf="menu.discount === 0">{{ menu.price }} บาท</span>
+        </p>
+
         <p>หมวดหมู่: {{ menu.category }}</p>
-        <!-- Display the category -->
       </div>
+
       <div class="form-check form-switch">
         <input
           class="form-check-input"
@@ -170,6 +194,7 @@
           [(ngModel)]="newMenu.category"
           name="menuCategory"
           (change)="checkCategory($event)"
+          required
         >
           <option *ngFor="let category of categories" [ngValue]="category">
             {{ category.category_name }}

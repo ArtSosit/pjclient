@@ -1,22 +1,37 @@
+<!-- Navbar ด้านบน -->
 <nav class="navbar" style="background-color: #dcdcdc">
   <div
     class="container-fluid"
-    style="display: flex; justify-content: space-between"
+    style="display: flex; justify-content: space-between; align-items: center"
   >
-    <label for="tablename"
-      >โต๊ะ {{ this.table?.table_number || "ไม่พบโต๊ะ" }}</label
-    >
-    <label for="cart"><a routerLink="./cart">cart icon</a></label>
+    <label for="tablename">
+      <i class="bi bi-table"></i> โต๊ะ
+      {{ this.table?.table_number || "ไม่พบโต๊ะ" }}
+    </label>
+    <label for="cart">
+      <a routerLink="./cart" style="text-decoration: none; color: inherit">
+        <i class="bi bi-cart"></i> ตะกร้า
+      </a>
+    </label>
   </div>
 </nav>
+
 <router-outlet></router-outlet>
-<nav class="navbar fixed-bottom" style="background-color: #dcdcdc">
-  <div
-    class="container-fluid"
-    style="display: flex; justify-content: space-between"
-  >
-    <label for="list"><a routerLink="./list">รายการที่สั่ง</a></label>
-    <label for="tablename">ใบเสร็จ</label>
-    <label for="tablename"><a routerLink="./payfor">การชำระเงิน</a></label>
+
+<!-- Navbar ด้านล่าง -->
+<nav class="navbar fixed-bottom custom-navbar">
+  <div class="container-fluid">
+    <label class="nav-item">
+      <a routerLink="./food"> <i class="bi bi-card-list"></i> เมนู </a>
+    </label>
+    <label class="nav-item">
+      <a routerLink="./list"> <i class="bi bi-list-ul"></i> รายการที่สั่ง </a>
+    </label>
+    <label class="nav-item">
+      <a routerLink="./bill"> <i class="bi bi-receipt"></i> ใบเสร็จ </a>
+    </label>
+    <label class="nav-item">
+      <a routerLink="./payfor"> <i class="bi bi-cash"></i> การชำระเงิน </a>
+    </label>
   </div>
 </nav>

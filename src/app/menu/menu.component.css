@@ -7,10 +7,14 @@
 
 .menu-card {
   display: flex;
+  flex-direction: column; /* จัดเรียงเป็นแนวตั้ง */
+  position: relative; /* เพื่อให้ star-icon อิงตำแหน่งจากตรงนี้ */
   background-color: #f8f8f8;
   border-radius: 10px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   padding: 15px;
+  margin: 10px;
+  overflow: hidden; /* ป้องกันไอคอนเลยขอบ */
 }
 
 .menu-image {
@@ -98,4 +102,33 @@
   border: none;
   font-size: 1.5rem;
   cursor: pointer;
+}
+
+.star-icon {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 24px;
+  cursor: pointer;
+  color: #ccc; /* ค่าเริ่มต้นเป็นสีเทา */
+  transition: color 0.2s ease-in-out;
+}
+
+.star-icon.active {
+  color: gold; /* เปลี่ยนเป็นสีทองเมื่อ active */
+}
+
+.discount {
+  color: red;
+  font-weight: bold;
+}
+
+.original-price {
+  text-decoration: line-through;
+  color: gray;
+  margin-right: 5px;
+}
+.discounted-price {
+  color: green;
+  font-weight: bold;
 }

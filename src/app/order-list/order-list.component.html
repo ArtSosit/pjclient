@@ -14,55 +14,61 @@
 
   <!-- Loop through filtered orders -->
   <div *ngFor="let order of filteredOrders()" class="order-card">
-    <h3>โต๊ะที่ {{ order.tableNumber }}</h3>
-    <button class="btn-cancel" (click)="Order_cancelled(order.order)">
-      ยกเลิก
-    </button>
-
+    <div class="order-header">
+      <h3>โต๊ะที่ {{ order.tableNumber }}</h3>
+      <button (click)="Order_cancelled(order.order)" class="btn btn-danger">
+        ยกเลิก
+      </button>
+    </div>
     <!-- Loop through each item in the order -->
     <div *ngFor="let item of order.items" class="order-item">
       <div class="order-details">
-        <span>{{ item.name }}</span>
+        <span class="item-name">{{ item.name }}</span>
         <div class="item-info">
-          <span>จำนวน</span>
+          <span>จำนวน:</span>
           <span class="quantity">{{ item.quantity }}</span>
         </div>
         <div class="item-info">
-          <span>{{ item.price }} บาท</span>
+          <span>สถานะ:</span>
+          <span
+            class="status"
+            [ngClass]="{
+              'status-pending': item.status === 'pending',
+              'status-success': item.status === 'success',
+              'status-cancelled': item.status === 'cancelled'
+            }"
+            >{{ item.status }}</span
+          >
+        </div>
+        <div class="item-info">
+          <span class="price">{{ item.price }} บาท</span>
         </div>
       </div>
-      <div>
+      <div class="action-buttons">
         <button
-          style="margin: 5px"
-          class="btn btn-warning"
+          class="btn btn-success"
           (click)="Detail_complate(item.detail_id)"
         >
           เสร็จ
         </button>
         <button
-          style="margin: 5px"
           class="btn btn-danger"
           (click)="Detail_cancelled(item.detail_id)"
         >
           ยกเลิก
         </button>
       </div>
-      <br />
     </div>
 
     <!-- Order Summary -->
     <div class="order-summary">
-      <span>รวม {{ order.totalPrice }} บาท</span>
+      <span class="total-price">รวม {{ order.totalPrice }} บาท</span>
       <span
-        [ngStyle]="{
-          color:
-            order.orderstatus === 'pending'
-              ? 'orange'
-              : order.orderstatus === 'success'
-              ? 'green'
-              : order.orderstatus === 'cancelled'
-              ? 'red'
-              : 'black'
+        class="order-status"
+        [ngClass]="{
+          'status-pending': order.orderstatus === 'pending',
+          'status-success': order.orderstatus === 'success',
+          'status-cancelled': order.orderstatus === 'cancelled'
         }"
         >{{ order.orderstatus }}</span
       >

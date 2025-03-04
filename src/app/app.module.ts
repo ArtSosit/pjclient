@@ -6,7 +6,7 @@ import { AppComponent } from './app.component';
 import { RegisterComponent } from './register/register.component';
 import { LoginComponent } from './login/login.component';
 
-import { RouterModule,Routes } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { MainComponent } from './main/main.component';
@@ -21,24 +21,29 @@ import { CartComponent } from './cart/cart.component';
 import { ListsComponent } from './lists/lists.component';
 import { InfoComponent } from './info/info.component';
 import { PayforComponent } from './payfor/payfor.component';
+import { BillComponent } from './bill/bill.component';
 const routes: Routes = [
   { path: '', component: RegisterComponent },
   // { path: 'register', component: RegisterComponent },
   { path: 'login', component: LoginComponent },
-  { path: 'main', component: MainComponent, children: [
-    { path: 'order-list', component: OrderListComponent },
-    { path: 'payment', component: PaymentComponent },
-    { path: 'table-management', component: TableManagementComponent },
-    { path: 'menu', component: MenuComponent },
-    { path: 'info', component:InfoComponent}
-  ]},
+  {
+    path: 'main', component: MainComponent, children: [
+      { path: 'order-list', component: OrderListComponent },
+      { path: 'payment', component: PaymentComponent },
+      { path: 'table-management', component: TableManagementComponent },
+      { path: 'menu', component: MenuComponent },
+      { path: 'info', component: InfoComponent }
+    ]
+  },
   {
     path: 'customer/:store/:table', component: CustomerMenusComponent, pathMatch: 'prefix', children: [
       { path: 'food', component: FoodListComponent },
       { path: 'cart', component: CartComponent },
       { path: 'list', component: ListsComponent },
-      {path: 'payfor',component: PayforComponent}
-  ]},
+      { path: 'payfor', component: PayforComponent },
+      { path: 'bill', component: BillComponent }
+    ]
+  },
 
 ];
 
@@ -58,7 +63,8 @@ const routes: Routes = [
     CartComponent,
     ListsComponent,
     InfoComponent,
-    PayforComponent
+    PayforComponent,
+    BillComponent
   ],
   imports: [
     HttpClientModule,
@@ -69,7 +75,7 @@ const routes: Routes = [
     QRCodeModule
 
 
-    
+
   ],
   providers: [],
   bootstrap: [AppComponent]
