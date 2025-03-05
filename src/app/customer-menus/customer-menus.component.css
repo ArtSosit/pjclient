@@ -1,25 +1,23 @@
 .custom-navbar {
   background-color: #dcdcdc;
-  padding: 10px 0; /* เพิ่ม Padding ด้านบน-ล่าง */
-  border-top: 2px solid #aaa; /* เพิ่มเส้นขอบด้านบน */
-}
-
-.container-fluid {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 10px; /* เว้นระยะขอบซ้าย-ขวา */
+  padding: 10px 0;
+  border-top: 2px solid #aaa;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  z-index: 1000;
 }
 
 .nav-item {
-  flex: 1; /* ทำให้ปุ่มมีขนาดเท่ากัน */
+  flex: 1;
   text-align: center;
   padding: 10px 0;
-  background: #f8f9fa; /* สีพื้นหลังของแต่ละปุ่ม */
-  border-radius: 10px; /* ทำให้ขอบมน */
-  margin: 0 5px; /* เพิ่มระยะห่างระหว่างปุ่ม */
+  background: #f8f9fa;
+  border-radius: 10px;
+  margin: 0 5px;
   font-weight: bold;
   transition: all 0.3s ease-in-out;
+  font-size: 16px; /* ขนาดฟอนต์ปกติ */
 }
 
 .nav-item a {
@@ -28,6 +26,44 @@
   display: block;
 }
 
-.nav-item:hover {
-  background: #e0e0e0; /* เปลี่ยนสีเมื่อ hover */
+/* ⭐ ปรับขนาดฟอนต์เมื่อหน้าจอเล็กลง */
+@media (max-width: 768px) {
+  .nav-item {
+    font-size: 14px; /* ฟอนต์เล็กลงสำหรับจอแท็บเล็ต */
+  }
+}
+
+@media (max-width: 480px) {
+  .nav-item {
+    font-size: 10px; /* ฟอนต์เล็กลงสำหรับจอมือถือ */
+  }
+}
+
+/* Navbar ด้านบน */
+.navbar-top {
+  background-color: #dcdcdc;
+  position: fixed; /* ทำให้ Navbar อยู่คงที่ */
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000; /* ให้แน่ใจว่าอยู่บนสุด */
+  padding: 10px 0;
+  border-bottom: 2px solid #aaa;
+}
+
+/* Navbar ด้านล่าง */
+.custom-navbar {
+  background-color: #dcdcdc;
+  padding: 10px 0;
+  border-top: 2px solid #aaa;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+/* ป้องกัน Content ถูก Navbar บัง */
+.content {
+  padding-top: 60px; /* ให้ Content ไม่โดน Navbar ด้านบนทับ */
+  padding-bottom: 70px; /* ให้ Content ไม่โดน Navbar ด้านล่างทับ */
 }

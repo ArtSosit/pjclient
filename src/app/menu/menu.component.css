@@ -132,3 +132,13 @@
   color: green;
   font-weight: bold;
 }
+
+.bestseller-badge {
+  background-color: #ff5733;
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+  padding: 5px 10px;
+  border-radius: 15px;
+  display: inline-block;
+}

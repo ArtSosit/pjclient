@@ -6,11 +6,24 @@
       <div
         class="menu-card mb-3"
         *ngIf="menu.is_recommended === 1"
-        (click)="openModal(menu)"
+        [ngClass]="{ disabled: menu.status === 'unavailable' }"
+        (click)="menu.status === 'available' ? openModal(menu) : null"
       >
         <img alt="menu-item" class="menu-image" [src]="menu.imageUrl" />
         <div class="menu-content">
+          <span
+            *ngIf="isBestSeller(menu.item_id)"
+            class="badge bestseller-badge"
+          >
+            🔥 ขายดี
+          </span>
           <h3>{{ menu.item_name }}</h3>
+
+          <!-- แสดงข้อความ "หมด" ถ้าเมนูปิด -->
+          <p *ngIf="menu.status === 'unavailable'" class="sold-out">
+            ❌ หมดชั่วคราว
+          </p>
+
           <!-- แสดงส่วนลดเฉพาะเมนูที่มีส่วนลด -->
           <p *ngIf="menu.discount > 0" class="discount">
             ลด {{ menu.discount }} บาท
@@ -27,7 +40,7 @@
               }}
               บาท
             </span>
-            <span *ngIf="menu.discount === 0"
+            <span *ngIf="menu.discount === 0 || menu.discount === null"
               >{{ menu.price | number : "1.2-2" }} บาท</span
             >
           </p>
@@ -43,11 +56,22 @@
       <div
         class="menu-card mb-3"
         *ngIf="menu.is_recommended === 0"
+        [ngClass]="{ disabled: menu.status === 'unavailable' }"
         (click)="openModal(menu)"
       >
         <img alt="menu-item" class="menu-image" [src]="menu.imageUrl" />
         <div class="menu-content">
+          <span
+            *ngIf="isBestSeller(menu.item_id)"
+            class="badge bestseller-badge"
+          >
+            🔥 ขายดี
+          </span>
           <h3>{{ menu.item_name }}</h3>
+
+          <p *ngIf="menu.status === 'unavailable'" class="sold-out">
+            ❌ หมดชั่วคราว
+          </p>
           <!-- แสดงส่วนลดเฉพาะเมนูที่มีส่วนลด -->
           <p *ngIf="menu.discount > 0" class="discount">
             ลด {{ menu.discount }} บาท
@@ -64,7 +88,7 @@
               }}
               บาท
             </span>
-            <span *ngIf="menu.discount === 0"
+            <span *ngIf="menu.discount === 0 || menu.discount === null"
               >{{ menu.price | number : "1.2-2" }} บาท</span
             >
           </p>
@@ -119,6 +143,17 @@
             class="quantity-input"
           />
           <button class="quantity-btn" (click)="increaseQuantity()">+</button>
+        </div>
+
+        <!-- ✅ หมายเหตุเพิ่มเติม -->
+        <div class="option-container">
+          <label for="note">หมายเหตุเพิ่มเติม:</label>
+          <textarea
+            id="note"
+            [(ngModel)]="additionalNote"
+            rows="3"
+            placeholder="เช่น ไม่ใส่พริก, เพิ่มชีส"
+          ></textarea>
         </div>
 
         <!-- ปุ่มเก็บลงตะกร้า -->

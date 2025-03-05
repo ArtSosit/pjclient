@@ -1,4 +1,4 @@
-<div>
+<div class="container">
   <h2>ชำระเงิน</h2>
 
   <!-- ถ้าไม่มีสินค้า -->
@@ -23,7 +23,7 @@
     </ng-container>
   </ng-container>
 
-  <div class="button-container d-grid gap-2">
+  <div class="button-container d-grid gap-2 mb-5">
     <button
       type="button"
       class="btn btn-primary"
@@ -39,7 +39,7 @@
 
 <!-- Modal -->
 <div
-  class="modal fade"
+  class="modal modal-sm fade"
   id="staticBackdrop"
   data-bs-backdrop="static"
   data-bs-keyboard="false"
@@ -103,7 +103,10 @@
 
           <!-- Input อัปโหลดสลิป -->
           <div class="mt-3">
-            <label for="slipUpload" class="form-label"
+            <label
+              for="slipUpload"
+              class="form-label"
+              *ngIf="lists.paymentStatus != 'pending'"
               >📎 อัปโหลดสลิปการชำระเงิน</label
             >
             <input
@@ -115,12 +118,21 @@
           </div>
         </div>
       </div>
-
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
           ปิด
         </button>
-        <button type="button" class="btn btn-primary" (click)="submit()">
+        <div *ngIf="lists.paymentStatus === 'pending'">
+          <p class="text-success">อัปโหลดสลิปแล้ว</p>
+        </div>
+
+        <!-- แสดงปุ่มอัปโหลดเฉพาะตอนที่ยังไม่มีสลิป -->
+        <button
+          *ngIf="lists.paymentStatus != 'pending'"
+          type="button"
+          class="btn btn-primary"
+          (click)="submit()"
+        >
           อัปโหลดสลิป
         </button>
       </div>

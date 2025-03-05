@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { QRCodeModule } from 'angularx-qrcode';
-import { SafeUrl } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { environment } from '@env/environment';
 
@@ -12,79 +10,110 @@ import { environment } from '@env/environment';
 })
 export class TableManagementComponent implements OnInit {
   tables: any[] = [];
-  newTable: any = {table_number:'',table_qr:''}
+  newTable: any = { table_number: '', table_qr: '' };
   userId: string | null = null;
+  tableCount: number = 1; // จัดการจำนวนโต๊ะที่เพิ่มเข้ามา
+  editingTable: any = null;
   constructor(private https: HttpClient, private router: Router) { }
-  ngOnInit(): void {
-  this.userId = localStorage.getItem('userId');
-    this.https.get < any[]>(`${environment.apiBaseUrl}/api/tables/`+this.userId).subscribe(data => {
-      this.tables = data;
-      console.log('Tables:', this.tables);
-    });
-  }
-  addTable(): void {
-    // Validate the new table data
 
-    // if (this.newTable.table_number && this.newTable.table_qr) {
+  ngOnInit(): void {
+    this.userId = localStorage.getItem('userId');
+    this.loadTables();
+  }
+
+  // โหลดโต๊ะจาก Backend
+  loadTables() {
+    if (this.userId) {
+      this.https.get<any[]>(`${environment.apiBaseUrl}/api/tables/${this.userId}`).subscribe(
+        (data) => {
+          this.tables = data;
+          console.log('Tables:', this.tables);
+        },
+        (error) => {
+          console.error('Error loading tables:', error);
+        }
+      );
+    }
+  }
+
+  // เพิ่มโต๊ะครั้งละหลายตัว
+  addTable(): void {
+    if (!this.newTable.table_number.trim() || this.tableCount < 1) {
+      alert('กรุณาใส่ชื่อโต๊ะและจำนวนที่ถูกต้อง');
+      return;
+    }
+
+    for (let i = 0; i < this.tableCount; i++) {
+      const tableNumber = `${this.newTable.table_number}-${i + 1}`; // ตั้งชื่อแยกเช่น "โต๊ะ-1", "โต๊ะ-2"
+
       this.https.post<any>(`${environment.apiBaseUrl}/api/tables/`, {
         userId: this.userId,
-        table_number: this.newTable.table_number,
+        table_number: tableNumber,
       }).subscribe(
         (response) => {
-          // Assuming response contains the created table details
-          this.tables.push(response); // Add the new table to the list
-          this.newTable = { table_number: '', table_qr: '' }; // Reset form
+          this.tables.push(response); // เพิ่มเข้า List
         },
         (error) => {
           console.error('Error adding table:', error);
         }
       );
-    // } else {
-    //   alert('Please provide both table number and QR code.');
-    // }
+    }
+
+    this.newTable = { table_number: '', table_qr: '' };
+    this.tableCount = 1;
   }
+
+  // ลบโต๊ะ
   removeTable(tableId: number) {
     if (confirm('ต้องการลบโต๊ะนี้ใช่มั้ย')) {
-      console.log(tableId);
-      this.https.delete(`${environment.apiBaseUrl}/api/tables/` + tableId).subscribe(() => {
+      this.https.delete(`${environment.apiBaseUrl}/api/tables/${tableId}`).subscribe(() => {
         this.tables = this.tables.filter(table => table.id !== tableId);
-        location.reload();
       });
     }
   }
 
-downloadQRCode(id: number) {
-  // URL ที่ต้องการให้ลูกค้าสแกนแล้วเปิด
-  const targetUrl = `${window.location.origin}/customer/${this.userId}/${id}/food`;
+  // ดาวน์โหลด QR Code
+  downloadQRCode(id: number) {
+    const targetUrl = `${window.location.origin}/customer/${this.userId}/${id}/food`;
+    const qrUrl = `http://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(targetUrl)}&size=200x200`;
 
-  // ใช้ API สร้าง QR Code
-  const qrUrl = `http://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(targetUrl)}&size=200x200`;
-
-  // ดึงภาพจาก URL และแปลงเป็นไฟล์ Blob
-  fetch(qrUrl)
-    .then(response => response.blob())
-    .then(blob => {
-      const blobUrl = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = blobUrl;
-      link.download = `qrcode.png`;
-      document.body.appendChild(link);
-      link.click(); 
-      document.body.removeChild(link);
-      URL.revokeObjectURL(blobUrl); // ล้างหน่วยความจำ
-    })
-    .catch(error => console.error('เกิดข้อผิดพลาดในการดาวน์โหลด QR Code:', error));
-}
-  testqr(id: number) {
-  const targetUrl = `${window.location.origin}/customer/${this.userId}/${id}/food`;
-console.log("Target URL:", targetUrl); 
-  // ใช้ API สร้าง QR Code
-  const qrUrl = `http://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(targetUrl)}&size=200x200`;
-
-     window.open(targetUrl, '_blank');
+    fetch(qrUrl)
+      .then(response => response.blob())
+      .then(blob => {
+        const blobUrl = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = blobUrl;
+        link.download = `qrcode_${id}.png`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(blobUrl);
+      })
+      .catch(error => console.error('เกิดข้อผิดพลาดในการดาวน์โหลด QR Code:', error));
   }
 
+  // ทดสอบ QR Code (เปิดลิงก์)
+  testqr(id: number) {
+    const targetUrl = `${window.location.origin}/customer/${this.userId}/${id}/food`;
+    console.log("Target URL:", targetUrl);
+    window.open(targetUrl, '_blank');
+  }
 
-  
-    
+  editTable(table: any) {
+    this.editingTable = { ...table }; // คัดลอกข้อมูลโต๊ะเพื่อแก้ไข
+
+  }
+
+  saveEdit(table: any) {
+    console.log("edit", this.editingTable.table_number)
+    this.https
+      .put(`http://localhost:3000/api/tables/${this.editingTable.table_id}`, { table_number: this.editingTable.table_number })
+      .subscribe((response) => {
+        const index = this.tables.findIndex(t => t.id === table.id);
+        this.tables[index] = response;
+        this.editingTable = null;
+        window.location.reload();
+      }
+      );
+  }
 }

@@ -1,5 +1,5 @@
 <!-- Navbar ด้านบน -->
-<nav class="navbar" style="background-color: #dcdcdc">
+<nav class="navbar navbar-top" style="background-color: #dcdcdc">
   <div
     class="container-fluid"
     style="display: flex; justify-content: space-between; align-items: center"
@@ -16,10 +16,15 @@
   </div>
 </nav>
 
-<router-outlet></router-outlet>
+<div class="content pb-5">
+  <router-outlet></router-outlet>
+</div>
 
 <!-- Navbar ด้านล่าง -->
-<nav class="navbar fixed-bottom custom-navbar">
+<nav
+  class="navbar fixed-bottom custom-navbar"
+  style="display: flex; justify-content: space-between; align-items: center"
+>
   <div class="container-fluid">
     <label class="nav-item">
       <a routerLink="./food"> <i class="bi bi-card-list"></i> เมนู </a>

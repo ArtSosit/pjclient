@@ -147,4 +147,6 @@ export class RegisterComponent implements OnInit {
       this.promptpayImage = file;
     }
   }
+
+  
 }

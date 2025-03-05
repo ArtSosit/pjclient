@@ -12,6 +12,7 @@ export class MenuComponent implements OnInit {
   userId: string | null = null;
   categories: any[] = [];
   newMenu: any = { name: '', price: 0, category: '', imageUrl: '' };
+  selectedMenu: any = null;
   newCategory: string = '';
   addingNewCategory: boolean = false;
   showModal: boolean = false;
@@ -24,6 +25,7 @@ export class MenuComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchMenus();
+    this.getPopularMenus();
   }
   fetchMenus(): void {
     // Retrieve the userId from localStorage
@@ -278,6 +280,71 @@ export class MenuComponent implements OnInit {
   getDiscountedPrice(price: number, discount: number): number {
     return price - discount;
   }
+
+
+  setDiscount(menu: any) {
+    this.selectedMenu = menu;
+    console.log("menu", this.selectedMenu)
+  }
+  discountMenu(id: any) {
+    console.log("id", id)
+    this.http.put<any>(`${environment.apiBaseUrl}/api/menus/discount/${id}`, { discount: this.newMenu.discount }).subscribe(
+      (response) => {
+        console.log('Discount updated successfully:', response);
+        location.reload();
+      },
+      (error) => {
+        console.error('Error updating discount:', error);
+      }
+    );
+
+  }
+
+  resetDiscountForm() {
+    this.newMenu.discount = null; // Reset the discount value
+    this.selectedMenu = null; // Optional: Reset selected menu
+
+  }
+  cancelDiscount(itemId: number) {
+    const menu = this.menus.find(m => m.item_id === itemId);
+    if (menu) {
+      menu.discount = 0; // รีเซ็ตส่วนลดเป็น 0
+      this.http.put<any>(`${environment.apiBaseUrl}/api/menus/discount/${itemId}`, { discount: 0 }).subscribe(
+        (response) => {
+          console.log('Discount updated successfully:', response);
+          location.reload();
+        },
+        (error) => {
+          console.error('Error updating discount:', error);
+        }
+      );
+      console.log(`ยกเลิกการลดราคาเมนู ID: ${itemId}`);
+    }
+  }
+
+  topMenus: any;
+
+  getPopularMenus(): void {
+    const storeId = localStorage.getItem("storeId");
+    console.log(storeId)
+    this.http.get(`${environment.apiBaseUrl}/api/menus/top-menu/${storeId}`).subscribe({
+      next: (response: any) => {
+        this.topMenus = response;
+        console.log("🔥 เมนูยอดนิยม (ตามจำนวนการสั่ง):", this.topMenus);
+      },
+      error: (error) => {
+        console.error("❌ ERROR:", error);
+      }
+    });
+  }
+
+  isBestSeller(menuId: number): boolean {
+    // ตรวจสอบว่ามี topMenus และมีค่าอยู่หรือไม่
+    if (!this.topMenus) return false;
+
+    return this.topMenus.some((menu: any) => menu.item_id === menuId);
+  }
+
 
 
 

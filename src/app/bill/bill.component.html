@@ -36,6 +36,11 @@
         <p class="total-amount">
           <strong>Total: ${{ getTotalAmount().toFixed(2) }}</strong>
         </p>
+        <p>
+          <strong
+            >Payment-status: {{ lists?.paymentStatus | uppercase }}</strong
+          >
+        </p>
       </div>
 
       <div class="bill-footer">

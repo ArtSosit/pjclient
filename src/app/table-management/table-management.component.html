@@ -1,5 +1,7 @@
 <div class="container">
-  <h2 class="text-center">โต๊ะอาหาร</h2>
+  <h2 class="text-center">ระบบจัดการโต๊ะ</h2>
+
+  <!-- อินพุตเพิ่มโต๊ะ -->
   <div class="input-group mb-3">
     <input
       type="text"
@@ -7,19 +9,62 @@
       placeholder="ชื่อโต๊ะ"
       class="form-control"
     />
-    <div class="input-group-append">
-      <button class="btn btn-primary" (click)="addTable()">เพิ่ม</button>
-    </div>
+    <input
+      type="number"
+      [(ngModel)]="tableCount"
+      min="1"
+      class="form-control"
+      placeholder="จำนวนโต๊ะ"
+    />
+    <button class="btn btn-primary" (click)="addTable()">เพิ่ม</button>
   </div>
 
-  <div *ngFor="let table of tables" class="table-item">
-    <span>ชื่อโต๊ะ: {{ table.table_number }}</span>
-    <button class="btn btn-danger" (click)="removeTable(table.table_id)">
-      ลบ
-    </button>
-    <button class="btn btn-info" (click)="downloadQRCode(table.table_id)">
-      ดาวน์โหลด
-    </button>
-    <button class="btn btn-info" (click)="testqr(table.table_id)">test</button>
+  <!-- รายการโต๊ะ -->
+  <div class="table-list">
+    <div *ngFor="let table of tables" class="table-item">
+      <div class="table-header">
+        <h5 *ngIf="editingTable?.table_id !== table.table_id">
+          {{ table.table_number }}
+        </h5>
+        <input
+          *ngIf="editingTable?.table_id === table.table_id"
+          type="text"
+          [(ngModel)]="editingTable.table_number"
+          class="form-control"
+        />
+
+        <span [class.available]="table.status === 'available'">
+          {{ table.status === "available" ? "🔴 ไม่ว่าง" : "🟢 ว่าง" }}
+        </span>
+      </div>
+
+      <div class="table-actions">
+        <button
+          class="btn btn-warning"
+          *ngIf="editingTable?.table_id !== table.table_id"
+          (click)="editTable(table)"
+        >
+          แก้ไข
+        </button>
+
+        <button
+          class="btn btn-success"
+          *ngIf="editingTable?.table_id === table.table_id"
+          (click)="saveEdit(table.table_id)"
+        >
+          บันทึก
+        </button>
+
+        <button class="btn btn-danger" (click)="removeTable(table.table_id)">
+          ลบ
+        </button>
+        <button class="btn btn-info" (click)="downloadQRCode(table.table_id)">
+          ดาวน์โหลด QR
+        </button>
+        <button class="btn btn-secondary" (click)="testqr(table.table_id)">
+          Test QR
+        </button>
+      </div>
+    </div>
   </div>
 </div>

@@ -9,8 +9,24 @@ import { io } from "socket.io-client";
   styleUrl: './food-list.component.css'
 })
 export class FoodListComponent implements OnInit {
+  orderId: string | null = null;
+  socket: any;
+  userId: string | null = null;
+  categories: any[] = [];
+  menus: any[] = [];
+  storeId: string | null = null;
+  tableId: string | null = null;
+  table: any;
+  selectedMenu: any = null;
+  openTime: any;
+  closeTime: any;
+  serverTime: any;
+
+
   constructor(private http: HttpClient, private route: ActivatedRoute) { this.loadCart(); this.socket = io("http://localhost:3000"); }
   ngOnInit(): void {
+    this.getServerTime()
+
     this.fetchMenus();
     this.orderId = localStorage.getItem("orderId");
     if (this.orderId) {
@@ -24,18 +40,73 @@ export class FoodListComponent implements OnInit {
         alert("ออเดอร์ของคุณถูกยกเลิกแล้ว");
       }
     });
+    this.getPopularMenus()
   }
-  orderId: string | null = null;
-  socket: any;
-  userId: string | null = null;
-  categories: any[] = [];
-  menus: any[] = [];
-  storeId: string | null = null;
-  tableId: string | null = null;
-  table: any;
-  selectedMenu: any = null;
+
+  getServerTime() {
+
+    this.http.get<{ serverTime: string }>(`${environment.apiBaseUrl}/server-time`)
+      .subscribe({
+        next: (response) => {
+          this.serverTime = new Date(response.serverTime);
+          console.log("⏰ เวลาปัจจุบันของเซิร์ฟเวอร์:", this.serverTime);
+          const store_id = localStorage.getItem("storeId");
+          this.http.get(`${environment.apiBaseUrl}/api/stores/time/${store_id}`)
+            .subscribe({
+              next: (response: any) => {
+                console.log("response", response);
+                this.openTime = response.open_time;
+                this.closeTime = response.close_time;
+                console.log("เวลาเปิด-ปิด:", this.openTime, this.closeTime);
+                this.caltime();
+              },
+              error: (error) => {
+                console.error("❌ ERROR:", error);
+              }
+            });
+        },
+        error: (error) => {
+          console.error("❌ ERROR:", error);
+        }
+      });
 
 
+
+  }
+
+  caltime() {
+    console.log("เวลาปัจจุบัน:", this.serverTime);
+    const currentTime = this.serverTime.getHours() * 60 + this.serverTime.getMinutes(); // แปลงเป็นนาที
+
+    const [openHour, openMinute] = this.openTime.split(":").map(Number);
+    const [closeHour, closeMinute] = this.closeTime.split(":").map(Number);
+
+    const openTime = openHour * 60 + openMinute;  // เวลาเปิดเป็นนาที
+    const closeTime = closeHour * 60 + closeMinute; // เวลาปิดเป็นนาที
+
+    if (currentTime < openTime && currentTime > closeTime) {
+      alert("ขออภัย ร้านปิดแล้ว กรุณากลับมาใหม่ในเวลาเปิดร้าน");
+      return;
+    }
+  }
+
+  // loadTime() {
+
+  //   const store_id = localStorage.getItem("storeId");
+  //   this.http.get(`${environment.apiBaseUrl}/api/stores/time/${store_id}`)
+  //     .subscribe({
+  //       next: (response: any) => {
+  //         console.log("response", response);
+  //         this.openTime = response.open_time;
+  //         this.closeTime = response.close_time;
+  //         console.log("เวลาเปิด-ปิด:", this.openTime, this.closeTime);
+  //       },
+  //       error: (error) => {
+  //         console.error("❌ ERROR:", error);
+  //       }
+  //     });
+
+  // }
   fetchMenus(): void {
     // Retrieve the userId from localStorage
     this.userId = localStorage.getItem('storeId');
@@ -118,16 +189,19 @@ export class FoodListComponent implements OnInit {
 
 
   cart: any[] = [];
+  additionalNote: string = "";
   addToCart(): void {
     if (this.selectedMenu) {
       // คำนวณราคาหลังหักส่วนลด
       const finalPrice = this.getDiscountedPrice(this.selectedMenu.price, this.selectedMenu.discount);
 
-      // ตรวจสอบว่าสินค้ามีอยู่แล้วหรือไม่
-      const existingItem = this.cart.find(item => item.item_id === this.selectedMenu.item_id);
+      // ตรวจสอบว่าสินค้าซ้ำ และมีหมายเหตุเดิมหรือไม่
+      const existingItem = this.cart.find(item =>
+        item.item_id === this.selectedMenu.item_id && item.note === this.additionalNote
+      );
 
       if (existingItem) {
-        // ถ้าสินค้าซ้ำ ให้เพิ่มจำนวนแทน
+        // ถ้าสินค้าซ้ำ และหมายเหตุเดิม ให้เพิ่มจำนวนแทน
         existingItem.quantity += this.quantity;
       } else {
         // ถ้ายังไม่มี ให้เพิ่มใหม่
@@ -137,6 +211,7 @@ export class FoodListComponent implements OnInit {
           price: finalPrice, // ใช้ราคาหลังหักส่วนลด
           quantity: this.quantity,
           imageUrl: this.selectedMenu.imageUrl,
+          note: this.additionalNote, // ✅ เพิ่มหมายเหตุที่ลูกค้าระบุ
         });
       }
 
@@ -144,8 +219,10 @@ export class FoodListComponent implements OnInit {
       console.log("ตะกร้าสินค้า:", this.cart);
       alert(`เพิ่ม ${this.selectedMenu.item_name} จำนวน ${this.quantity} ชิ้น ลงในตะกร้าแล้ว!`);
 
+      // ✅ รีเซ็ตค่า
       this.closeModal();
-      this.selectedMenu = null; // เคลียร์ค่าหลังจากเพิ่มลงตะกร้า
+      this.selectedMenu = null;
+      this.additionalNote = ""; // เคลียร์หมายเหตุหลังเพิ่มลงตะกร้า
     }
   }
 
@@ -173,6 +250,29 @@ export class FoodListComponent implements OnInit {
   }
   getDiscountedPrice(price: number, discount: number): number {
     return price - discount;
+  }
+
+  topMenus: any;
+
+  getPopularMenus(): void {
+    const storeId = localStorage.getItem("storeId");
+    console.log(storeId)
+    this.http.get(`${environment.apiBaseUrl}/api/menus/top-menu/${storeId}`).subscribe({
+      next: (response: any) => {
+        this.topMenus = response;
+        console.log("🔥 เมนูยอดนิยม (ตามจำนวนการสั่ง):", this.topMenus);
+      },
+      error: (error) => {
+        console.error("❌ ERROR:", error);
+      }
+    });
+  }
+
+  isBestSeller(menuId: number): boolean {
+    // ตรวจสอบว่ามี topMenus และมีค่าอยู่หรือไม่
+    if (!this.topMenus) return false;
+
+    return this.topMenus.some((menu: any) => menu.item_id === menuId);
   }
 
 

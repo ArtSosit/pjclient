@@ -26,6 +26,9 @@
       [class.active]="menu.is_recommended === 1"
       (click)="toggleRecommended(menu.item_id, menu.is_recommended)"
     >
+      <span *ngIf="isBestSeller(menu.item_id)" class="badge bestseller-badge">
+        🔥 ขายดี
+      </span>
       <i class="bi bi-star-fill"></i>
     </div>
 
@@ -50,7 +53,9 @@
             }}
             บาท
           </span>
-          <span *ngIf="menu.discount === 0">{{ menu.price }} บาท</span>
+          <span *ngIf="menu.discount === 0 || menu.discount === null"
+            >{{ menu.price }} บาท</span
+          >
         </p>
 
         <p>หมวดหมู่: {{ menu.category }}</p>
@@ -71,6 +76,21 @@
       </div>
 
       <div>
+        <button
+          class="btn btn-warning"
+          data-bs-toggle="modal"
+          data-bs-target="#discountModal"
+          (click)="setDiscount(menu)"
+        >
+          ลดราคา
+        </button>
+        <button
+          *ngIf="menu.discount > 0"
+          class="btn btn-secondary"
+          (click)="cancelDiscount(menu.item_id)"
+        >
+          ยกเลิกการลดราคา
+        </button>
         <button class="btn btn-danger" (click)="DeleteMenu(menu.item_id)">
           ลบ
         </button>
@@ -233,6 +253,64 @@
       <button class="btn btn-primary" (click)="editcategory()">
         อัปเดตรายการ
       </button>
+    </div>
+  </div>
+</div>
+
+<!-- ลดราคา -->
+<div
+  class="modal"
+  id="discountModal"
+  tabindex="-1"
+  aria-labelledby="discountModal"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="discountModal">
+          <h1>ลดราคาอาหาร</h1>
+        </h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <p>ลดราคา "{{ selectedMenu?.item_name }}"</p>
+            <label for="discount">ราคาที่ต้องการลด</label>
+            <input
+              type="number"
+              class="form-control"
+              id="discount"
+              [(ngModel)]="newMenu.discount"
+              name="discount"
+              placeholder="{{ selectedMenu?.price }}"
+            />
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-bs-dismiss="modal"
+          (click)="resetDiscountForm()"
+        >
+          Close
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="discountMenu(selectedMenu?.item_id)"
+        >
+          บันทึก
+        </button>
+      </div>
     </div>
   </div>
 </div>

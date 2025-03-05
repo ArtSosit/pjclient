@@ -18,6 +18,7 @@
         <div class="quantity-container">
           <button (click)="updateQuantity(i, item.quantity - 1)">-</button>
           <input
+            class="quantity-input"
             type="number"
             [(ngModel)]="item.quantity"
             (change)="updateQuantity(i, item.quantity)"
@@ -26,8 +27,10 @@
         </div>
 
         <p>รวม: {{ item.price * item.quantity }} บาท</p>
+        <p>หมายเหตุเพิ่มเติม: {{ item.note }}</p>
       </div>
-      <button (click)="removeFromCart(i)">ลบ</button>
+
+      <button (click)="removeFromCart(i)" class="btn btn-danger">ลบ</button>
     </li>
   </ul>
   <button class="btn btn-success" (click)="ordering()">สั่งอาหาร</button>

@@ -13,7 +13,7 @@ export class PayforComponent implements OnInit {
   qrcode: any;
   groupedItems: any[] = [];
 
-  constructor(private router: Router, private http: HttpClient) {}
+  constructor(private router: Router, private http: HttpClient) { }
 
   ngOnInit(): void {
     this.fetchdata();
@@ -77,7 +77,7 @@ export class PayforComponent implements OnInit {
       if (item.status === "Success") {
         const existing = acc.find((i: any) => i.itemId === item.itemId);
         if (existing) {
-            existing.quantity = parseInt(existing.quantity, 10) + parseInt(item.quantity, 10);
+          existing.quantity = parseInt(existing.quantity, 10) + parseInt(item.quantity, 10);
         } else {
           acc.push({ ...item });
         }
@@ -90,41 +90,43 @@ export class PayforComponent implements OnInit {
   }
 
   getTotalAmount(): number {
-  return this.groupedItems.reduce((total, item) => total + item.price * item.quantity, 0);
+    return this.groupedItems.reduce((total, item) => total + item.price * item.quantity, 0);
   }
- file: File | null = null;
+  file: File | null = null;
 
-onSlipUpload(event: any) {
-  this.file = event.target.files[0];
-  if (this.file) {
-    console.log("📎 อัปโหลดสลิป:", this.file);
-  }
-}
-
-submit() {
-  if (!this.file) {
-    console.error("❌ กรุณาเลือกไฟล์ก่อนทำการอัปโหลด");
-    return;
+  onSlipUpload(event: any) {
+    this.file = event.target.files[0];
+    if (this.file) {
+      console.log("📎 อัปโหลดสลิป:", this.file);
+    }
   }
 
-  const orderId = localStorage.getItem("orderId");
-  if (!orderId) {
-    console.error("❌ ไม่พบ orderId");
-    return;
+  submit() {
+    if (!this.file) {
+      console.error("❌ กรุณาเลือกไฟล์ก่อนทำการอัปโหลด");
+      return;
+    }
+
+    const orderId = localStorage.getItem("orderId");
+    if (!orderId) {
+      console.error("❌ ไม่พบ orderId");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("proof", this.file); // 'proof' คือตัวแปรที่ backend ต้องรับ
+
+    this.http.put<any>(`${environment.apiBaseUrl}/api/orders/proof/${orderId}`, formData)
+      .subscribe(
+        (response) => {
+          console.log("✅ อัปโหลดสลิปสำเร็จ:", response);
+          this.router.navigate(['./bill']);
+
+        },
+        (error) => {
+          console.error("❌ อัปโหลดสลิปผิดพลาด:", error);
+        }
+      );
   }
-
-  const formData = new FormData();
-  formData.append("proof", this.file); // 'proof' คือตัวแปรที่ backend ต้องรับ
-
-  this.http.put<any>(`${environment.apiBaseUrl}/api/orders/proof/${orderId}`, formData)
-    .subscribe(
-      (response) => {
-        console.log("✅ อัปโหลดสลิปสำเร็จ:", response);
-      },
-      (error) => {
-        console.error("❌ อัปโหลดสลิปผิดพลาด:", error);
-      }
-    );
-}
 
 }

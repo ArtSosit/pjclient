@@ -1,37 +1,39 @@
 <div class="content">
   <h2 class="text-center">การชำระเงิน</h2>
 
-  <div *ngFor="let order of orders" class="order-card">
-    <h3>โต๊ะที่ {{ order.tableNumber }}</h3>
+  <div class="order-container">
+    <div *ngFor="let order of orders" class="order-card">
+      <h3 class="order-table">โต๊ะที่ {{ order.tableNumber }}</h3>
 
-    <div *ngFor="let item of order.items" class="order-item">
-      <!-- <img [src]="item.imageUrl" alt="{{ item.name }}" class="food-img" /> -->
-      <div class="order-details">
-        <span>{{ item.name }}</span>
-        <div class="item-info">
-          <span>จำนวน</span>
-          <span class="quantity">{{ item.quantity }}</span>
-        </div>
-        <div class="item-info">
-          <span>{{ item.price }} บาท</span>
+      <div class="order-items">
+        <div *ngFor="let item of order.items" class="order-item">
+          <div class="order-details">
+            <span class="item-name">{{ item.name }}</span>
+            <span class="quantity">จำนวน: {{ item.quantity }}</span>
+            <span class="price">{{ item.price }} บาท</span>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- Order Summary -->
-    <div class="order-summary">
-      <span>รวม {{ order.totalPrice }} บาท</span>
-      <button
-        class="btn btn-danger"
-        [ngClass]="{ disabled: !order.proof || order.proof.trim() === '' }"
-        (click)="viewSlip(order.proof)"
-      >
-        ดูสลิป
-      </button>
-
-      <button class="btn btn-success" (click)="paidConfirm(order.order)">
-        ยืนยันการชำระเงิน
-      </button>
+      <!-- Order Summary -->
+      <div class="order-summary">
+        <span class="total-price">รวม {{ order.totalPrice }} บาท</span>
+        <span class="payment-status"
+          >การชำระเงิน: {{ order.paymentstatus }}</span
+        >
+        <div class="buttons">
+          <button
+            class="btn btn-danger"
+            [ngClass]="{ disabled: !order.proof || order.proof.trim() === '' }"
+            (click)="viewSlip(order.proof)"
+          >
+            ดูสลิป
+          </button>
+          <button class="btn btn-success" (click)="paidConfirm(order.order)">
+            ยืนยันการชำระเงิน
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </div>

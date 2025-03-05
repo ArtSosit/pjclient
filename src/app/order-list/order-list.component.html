@@ -25,23 +25,29 @@
       <div class="order-details">
         <span class="item-name">{{ item.name }}</span>
         <div class="item-info">
-          <span>จำนวน:</span>
-          <span class="quantity">{{ item.quantity }}</span>
+          <span
+            >จำนวน: <span class="quantity">{{ item.quantity }}</span></span
+          >
         </div>
         <div class="item-info">
-          <span>สถานะ:</span>
           <span
-            class="status"
-            [ngClass]="{
-              'status-pending': item.status === 'pending',
-              'status-success': item.status === 'success',
-              'status-cancelled': item.status === 'cancelled'
-            }"
-            >{{ item.status }}</span
+            >สถานะ:
+            <span
+              class="status"
+              [ngClass]="{
+                'status-pending': item.status === 'pending',
+                'status-success': item.status === 'success',
+                'status-cancelled': item.status === 'cancelled'
+              }"
+              >{{ item.status }}</span
+            ></span
           >
         </div>
         <div class="item-info">
           <span class="price">{{ item.price }} บาท</span>
+        </div>
+        <div>
+          <span>รายละเอียด: {{ item.note }}</span>
         </div>
       </div>
       <div class="action-buttons">
