@@ -1,0 +1,30 @@
+<div class="card-container">
+  <!-- Card สำหรับยอดขาย -->
+  <div class="card">
+    <div class="card-header">รวมยอดขาย</div>
+    <div class="card-body">
+      <p class="card-text">ยอดขายทั้งหมด</p>
+      <h1 class="card-title">{{ totalSales | currency : "THB" }}</h1>
+    </div>
+  </div>
+
+  <!-- ตารางสำหรับแสดงข้อมูลยอดขายตามเมนู -->
+  <div class="table-container">
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>ชื่อเมนู</th>
+          <th>จำนวนที่ขายได้</th>
+          <th>ยอดขายรวม (บาท)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let sale of sales">
+          <td>{{ sale.item_name }}</td>
+          <td>{{ sale.total_quantity_sold }}</td>
+          <td>{{ sale.total_sales | currency : "THB" }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

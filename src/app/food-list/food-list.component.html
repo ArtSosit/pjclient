@@ -1,8 +1,30 @@
+<div class="input-group mb-3">
+  <!-- กล่องค้นหาสำหรับค้นหาชื่อเมนู -->
+  <input
+    type="text"
+    class="form-control"
+    [(ngModel)]="searchText"
+    (ngModelChange)="filterMenus()"
+    placeholder="ค้นหาเมนู..."
+  />
+
+  <!-- เมนูหมวดหมู่ -->
+  <select
+    class="form-select"
+    [(ngModel)]="selectedCategory"
+    (ngModelChange)="filterMenus()"
+  >
+    <option value="">ทั้งหมด</option>
+    <option *ngFor="let cate of categories" [value]="cate.category_name">
+      {{ cate.category_name }}
+    </option>
+  </select>
+</div>
 <div class="menu-container">
   <!-- 🌟 ส่วนเมนูแนะนำ -->
   <div class="recommended-menu" *ngIf="recommendedMenusExist()">
     <h2>🌟 เมนูแนะนำ</h2>
-    <ng-container *ngFor="let menu of menus">
+    <ng-container *ngFor="let menu of filteredMenus">
       <div
         class="menu-card mb-3"
         *ngIf="menu.is_recommended === 1"
@@ -18,17 +40,12 @@
             🔥 ขายดี
           </span>
           <h3>{{ menu.item_name }}</h3>
-
-          <!-- แสดงข้อความ "หมด" ถ้าเมนูปิด -->
           <p *ngIf="menu.status === 'unavailable'" class="sold-out">
             ❌ หมดชั่วคราว
           </p>
-
-          <!-- แสดงส่วนลดเฉพาะเมนูที่มีส่วนลด -->
           <p *ngIf="menu.discount > 0" class="discount">
             ลด {{ menu.discount }} บาท
           </p>
-
           <p>
             ราคา:
             <span *ngIf="menu.discount > 0" class="original-price">
@@ -40,9 +57,9 @@
               }}
               บาท
             </span>
-            <span *ngIf="menu.discount === 0 || menu.discount === null"
-              >{{ menu.price | number : "1.2-2" }} บาท</span
-            >
+            <span *ngIf="menu.discount === 0 || menu.discount === null">
+              {{ menu.price | number : "1.2-2" }} บาท
+            </span>
           </p>
         </div>
       </div>
@@ -52,7 +69,7 @@
   <!-- 🍽️ ส่วนเมนูปกติ -->
   <div class="all-menu">
     <h2>🍽️ เมนูทั้งหมด</h2>
-    <ng-container *ngFor="let menu of menus">
+    <ng-container *ngFor="let menu of filteredMenus">
       <div
         class="menu-card mb-3"
         *ngIf="menu.is_recommended === 0"
@@ -68,15 +85,12 @@
             🔥 ขายดี
           </span>
           <h3>{{ menu.item_name }}</h3>
-
           <p *ngIf="menu.status === 'unavailable'" class="sold-out">
             ❌ หมดชั่วคราว
           </p>
-          <!-- แสดงส่วนลดเฉพาะเมนูที่มีส่วนลด -->
           <p *ngIf="menu.discount > 0" class="discount">
             ลด {{ menu.discount }} บาท
           </p>
-
           <p>
             ราคา:
             <span *ngIf="menu.discount > 0" class="original-price">
@@ -88,9 +102,9 @@
               }}
               บาท
             </span>
-            <span *ngIf="menu.discount === 0 || menu.discount === null"
-              >{{ menu.price | number : "1.2-2" }} บาท</span
-            >
+            <span *ngIf="menu.discount === 0 || menu.discount === null">
+              {{ menu.price | number : "1.2-2" }} บาท
+            </span>
           </p>
         </div>
       </div>

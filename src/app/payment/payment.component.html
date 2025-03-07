@@ -10,6 +10,18 @@
           <div class="order-details">
             <span class="item-name">{{ item.name }}</span>
             <span class="quantity">จำนวน: {{ item.quantity }}</span>
+            <span
+              >สถานะ:
+              <span
+                class="status"
+                [ngClass]="{
+                  'status-pending': item.status === 'Pending',
+                  'status-success': item.status === 'Success',
+                  'status-cancelled': item.status === 'Cancelled'
+                }"
+                >{{ item.status }}</span
+              ></span
+            >
             <span class="price">{{ item.price }} บาท</span>
           </div>
         </div>
@@ -17,7 +29,9 @@
 
       <!-- Order Summary -->
       <div class="order-summary">
-        <span class="total-price">รวม {{ order.totalPrice }} บาท</span>
+        <span class="total-price"
+          >รวม {{ calculateTotalPrice(order.items) }} บาท</span
+        >
         <span class="payment-status"
           >การชำระเงิน: {{ order.paymentstatus }}</span
         >

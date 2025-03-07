@@ -22,6 +22,10 @@ import { ListsComponent } from './lists/lists.component';
 import { InfoComponent } from './info/info.component';
 import { PayforComponent } from './payfor/payfor.component';
 import { BillComponent } from './bill/bill.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { AddkitchenComponent } from './addkitchen/addkitchen.component';
+import { ReactiveFormsModule } from '@angular/forms';
+
 const routes: Routes = [
   { path: '', component: RegisterComponent },
   // { path: 'register', component: RegisterComponent },
@@ -32,7 +36,9 @@ const routes: Routes = [
       { path: 'payment', component: PaymentComponent },
       { path: 'table-management', component: TableManagementComponent },
       { path: 'menu', component: MenuComponent },
-      { path: 'info', component: InfoComponent }
+      { path: 'info', component: InfoComponent },
+      { path: 'dashboard', component: DashboardComponent },
+      { path: 'addkitchen', component: AddkitchenComponent }
     ]
   },
   {
@@ -64,7 +70,9 @@ const routes: Routes = [
     ListsComponent,
     InfoComponent,
     PayforComponent,
-    BillComponent
+    BillComponent,
+    DashboardComponent,
+    AddkitchenComponent
   ],
   imports: [
     HttpClientModule,
@@ -72,7 +80,8 @@ const routes: Routes = [
     AppRoutingModule,
     FormsModule,
     RouterModule.forRoot(routes),
-    QRCodeModule
+    QRCodeModule,
+    ReactiveFormsModule
 
 
 

@@ -1,0 +1,82 @@
+<div class="container mt-5">
+  <div class="card">
+    <div class="card-header bg-primary text-white">เพิ่มผู้ใช้ (ครัว)</div>
+    <div class="card-body">
+      <form [formGroup]="addUserForm" (ngSubmit)="addUser()">
+        <div class="mb-3">
+          <label for="username" class="form-label">ชื่อผู้ใช้</label>
+          <input
+            type="text"
+            id="username"
+            class="form-control"
+            formControlName="username"
+            required
+          />
+        </div>
+
+        <div class="mb-3">
+          <label for="password" class="form-label">รหัสผ่าน</label>
+          <input
+            type="password"
+            id="password"
+            class="form-control"
+            formControlName="password"
+            required
+          />
+        </div>
+
+        <button
+          type="submit"
+          class="btn btn-success"
+          [disabled]="addUserForm.invalid"
+        >
+          เพิ่มผู้ใช้
+        </button>
+      </form>
+
+      <div *ngIf="message" class="alert alert-success mt-3">
+        {{ message }}
+      </div>
+
+      <div *ngIf="errorMessage" class="alert alert-danger mt-3">
+        {{ errorMessage }}
+      </div>
+    </div>
+  </div>
+
+  <!-- 🛑 ตารางแสดงรายชื่อผู้ใช้ (ไม่แสดง password) -->
+  <div class="card mt-4">
+    <div class="card-header bg-secondary text-white">รายชื่อผู้ใช้ (ครัว)</div>
+    <div class="card-body">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>ชื่อผู้ใช้</th>
+            <th>การจัดการ</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let user of kitchen; let i = index">
+            <td>{{ i + 1 }}</td>
+            <td>{{ user.username }}</td>
+            <td>
+              <button
+                class="btn btn-warning btn-sm me-2"
+                (click)="changePassword(user.kitchen_user_id)"
+              >
+                แก้ไขรหัสผ่าน
+              </button>
+              <button
+                class="btn btn-danger btn-sm"
+                (click)="deleteUser(user.kitchen_user_id)"
+              >
+                ลบ
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

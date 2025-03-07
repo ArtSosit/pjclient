@@ -68,7 +68,9 @@
 
     <!-- Order Summary -->
     <div class="order-summary">
-      <span class="total-price">รวม {{ order.totalPrice }} บาท</span>
+      <span class="total-price"
+        >รวม {{ calculateTotalPrice(order.items) }} บาท</span
+      >
       <span
         class="order-status"
         [ngClass]="{

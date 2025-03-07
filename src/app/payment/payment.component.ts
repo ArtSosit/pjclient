@@ -63,4 +63,15 @@ export class PaymentComponent implements OnInit {
     });
   }
 
+  calculateTotalPrice(items: any[]): number {
+
+    // Filter items where status is 'success'
+    const successItems = items.filter(item => item.status === 'Success');
+    console.log('Calculating total price for items:', successItems);
+    // Sum the price of these items
+    const total = successItems.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+
+    return total;
+  }
+
 }

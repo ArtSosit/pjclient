@@ -92,3 +92,15 @@
   opacity: 0.5;
   pointer-events: none;
 }
+.status {
+  font-weight: bold;
+} 
+.status-pending {
+  color: orange;
+}
+.status-success {
+  color: green;
+}
+.status-cancelled {
+  color: red;
+}

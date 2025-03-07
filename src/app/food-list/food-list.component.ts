@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { environment } from '@env/environment';
 import { io } from "socket.io-client";
+
 @Component({
   selector: 'app-food-list',
   templateUrl: './food-list.component.html',
@@ -44,7 +45,6 @@ export class FoodListComponent implements OnInit {
   }
 
   getServerTime() {
-
     this.http.get<{ serverTime: string }>(`${environment.apiBaseUrl}/server-time`)
       .subscribe({
         next: (response) => {
@@ -73,7 +73,6 @@ export class FoodListComponent implements OnInit {
 
 
   }
-
   caltime() {
     console.log("เวลาปัจจุบัน:", this.serverTime);
     const currentTime = this.serverTime.getHours() * 60 + this.serverTime.getMinutes(); // แปลงเป็นนาที
@@ -90,23 +89,6 @@ export class FoodListComponent implements OnInit {
     }
   }
 
-  // loadTime() {
-
-  //   const store_id = localStorage.getItem("storeId");
-  //   this.http.get(`${environment.apiBaseUrl}/api/stores/time/${store_id}`)
-  //     .subscribe({
-  //       next: (response: any) => {
-  //         console.log("response", response);
-  //         this.openTime = response.open_time;
-  //         this.closeTime = response.close_time;
-  //         console.log("เวลาเปิด-ปิด:", this.openTime, this.closeTime);
-  //       },
-  //       error: (error) => {
-  //         console.error("❌ ERROR:", error);
-  //       }
-  //     });
-
-  // }
   fetchMenus(): void {
     // Retrieve the userId from localStorage
     this.userId = localStorage.getItem('storeId');
@@ -130,6 +112,7 @@ export class FoodListComponent implements OnInit {
           imageUrl: `${environment.apiBaseUrl}/uploads/${menu.item_image}`  // Prepend the server URL to imageUrl
         }));
         console.log("food", this.menus)
+        this.filterMenus()
       },
       (error) => {
         console.error('Error loading menu items:', error);
@@ -159,13 +142,13 @@ export class FoodListComponent implements OnInit {
         console.error('Error fetching tables:', error);
       }
     });
+
   }
   quantity: number = 1; // ค่าจำนวนเริ่มต้นเป็น 1
   openModal(menu: any): void {
     this.selectedMenu = menu;
     this.quantity = 1;
   }
-
   // Close the modal
   closeModal(): void {
     this.selectedMenu = null;
@@ -275,7 +258,16 @@ export class FoodListComponent implements OnInit {
     return this.topMenus.some((menu: any) => menu.item_id === menuId);
   }
 
-
-
+  filteredMenus: any[] = []; // เมนูที่กรองแล้ว
+  searchText: string = ""; // ค่าค้นหา
+  selectedCategory: string = ""; // หมวดหมู่ที่เลือก
+  filterMenus(): void {
+    console.log("🔍 ค้นหา:", this.searchText);
+    this.filteredMenus = this.menus.filter(menu => {
+      const matchesSearch = menu.item_name.toLowerCase().includes(this.searchText.toLowerCase());
+      const matchesCategory = this.selectedCategory ? menu.category === this.selectedCategory : true;
+      return matchesSearch && matchesCategory;
+    });
+  }
 
 }

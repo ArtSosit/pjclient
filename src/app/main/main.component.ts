@@ -12,23 +12,23 @@ export class MainComponent implements OnInit {
 
   userId: string | null = null; // เพิ่มตัวแปรสำหรับเก็บ userId
   private apiUrl = `${environment.apiBaseUrl}/api/stores/`; // URL ของ API สำหรับดึงข้อมูลร้านค้า
-  imageUrl: string | null= null;
+  imageUrl: string | null = null;
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient, private router: Router) { }
 
   ngOnInit() {
 
 
-    this.userId = localStorage.getItem('userId'); 
+    this.userId = localStorage.getItem('userId');
     if (!this.userId) {
       this.router.navigate(['/login']);
     } else {
-      this.fetchMenus(); 
-      
+      this.fetchMenus();
+
     }
   }
 
-  logout() { 
+  logout() {
     localStorage.removeItem('userId');// ลบ localStorage
     localStorage.removeItem('email');
     localStorage.removeItem('password');
@@ -41,13 +41,12 @@ export class MainComponent implements OnInit {
     this.http.get<any[]>(apiUrlWithUserId).subscribe(
       (response) => {
         this.store = response; // เก็บข้อมูลใน main
-        console.log('Menus fetched:', this.store); // แสดงข้อมูลใน console
-        this.imageUrl = `${environment.apiBaseUrl}/uploads/${this.store.store_image}`;  
+        this.imageUrl = `${environment.apiBaseUrl}/uploads/${this.store.store_image}`;
       },
       (error) => {
         console.error('Error fetching menus:', error); // แสดงข้อผิดพลาดใน console
       }
     );
   }
-  
+
 }
