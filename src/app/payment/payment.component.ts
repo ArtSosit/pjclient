@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { JwtHelperService } from '@auth0/angular-jwt';
 import { environment } from '@env/environment';
 
 @Component({
@@ -10,16 +11,19 @@ import { environment } from '@env/environment';
 export class PaymentComponent implements OnInit {
   userId: any;
   orders: any = [];
+  jwtHelper = new JwtHelperService();
+  token: any;
 
   constructor(private http: HttpClient) { }
 
   ngOnInit(): void {
+
     this.getOrders();
   }
 
   getOrders(): void {
-    this.userId = localStorage.getItem('userId');
-    this.userId = localStorage.getItem('userId');
+    this.token = localStorage.getItem('token');
+    this.userId = this.jwtHelper.decodeToken(this.token).userId;
 
     if (!this.userId) {
       console.error('User ID not found in localStorage');
@@ -32,7 +36,7 @@ export class PaymentComponent implements OnInit {
     this.http.get<any[]>(`${environment.apiBaseUrl}/api/orders/paid/` + this.userId).subscribe({
       next: (data) => {
         this.orders = data; // เก็บข้อมูลที่ได้จาก API
-        console.log('Fetched orders:', this.orders); // แสดงผลลัพธ์ที่ได้จาก API
+        console.log('Fetch  ed orders:', this.orders); // แสดงผลลัพธ์ที่ได้จาก API
       },
       error: (error) => {
         console.error('Error loading orders:', error); // แสดงข้อผิดพลาดถ้ามี
@@ -50,11 +54,11 @@ export class PaymentComponent implements OnInit {
     window.open(imageUrl, "_blank"); // เปิดสลิปในหน้าต่างใหม่
   }
 
-  paidConfirm(id: number) {
-    this.http.put<any>(`${environment.apiBaseUrl}/api/orders/complete-paid/${id}`, {}).subscribe({
+  paidConfirm(orderId: number) {
+    this.http.put<any>(`${environment.apiBaseUrl}/api/orders/complete-paid/${orderId}`, {}).subscribe({
       next: (data) => {
         console.log("✅ ชำระเงินสำเร็จ", data);
-        alert("ออเดอร์ #" + id + " ได้รับการยืนยันการชำระเงินแล้ว!");
+        alert("ออเดอร์ #" + orderId + " ได้รับการยืนยันการชำระเงินแล้ว!");
       },
       error: (error) => {
         console.error("❌ เกิดข้อผิดพลาดในการอัปเดตสถานะ:", error);

@@ -1,5 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { JwtHelperService } from '@auth0/angular-jwt';
 import { environment } from '@env/environment';
 @Component({
   selector: 'app-menu',
@@ -21,16 +23,34 @@ export class MenuComponent implements OnInit {
   isChecked: boolean = true;
   selectedcate: string = "all";
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private router: Router) { }
+
+  jwtHelper = new JwtHelperService();
+  token: string | null = null;
+
 
   ngOnInit(): void {
+
+    this.token = localStorage.getItem('token');
+    if (!this.token || this.jwtHelper.isTokenExpired(this.token)) {
+      this.router.navigate(['/login']);
+    } else {
+      // ตรวจสอบได้ว่า token ยังใช้ได้หรือไม่
+      this.userId = this.jwtHelper.decodeToken(this.token).userId;
+      console.log('User ID:', this.userId);
+      this.fetchMenus();
+    }
     this.fetchMenus();
     this.getPopularMenus();
+
+
   }
   fetchMenus(): void {
+    console.log('Fetching menus...', this.userId);
     // Retrieve the userId from localStorage
-    this.userId = localStorage.getItem('userId');
-
+    // this.userId = localStorage.getItem('userId');
+    this.token = localStorage.getItem('token');
+    this.userId = this.jwtHelper.decodeToken(this.token || '').userId;
     // Fetch categories
     this.http.get<any[]>(`${environment.apiBaseUrl}/api/categories/` + this.userId).subscribe(
       (data) => {
@@ -110,7 +130,7 @@ export class MenuComponent implements OnInit {
       },
       (error) => {
         console.error('Error adding new menu:', error);
-        alert('เกิดข้อผิดพลาดในการเพิ่มเมนูใหม่ โปรดลองอีกครั้ง');
+        alert(error.error || 'เกิดข้อผิดพลาดในการเพิ่มเมนู');
       }
     );
   }
@@ -184,7 +204,7 @@ export class MenuComponent implements OnInit {
   updateMenu(id: string) {
     // สร้างข้อมูลสำหรับอัปเดตเมนู
     const formData = new FormData();
-    formData.append('category_id', id);
+    formData.append('category_id', id || '');
     formData.append('store_id', this.userId || '');
     formData.append('name', this.newMenu.name);
     formData.append('price', this.newMenu.price.toString());
@@ -201,8 +221,9 @@ export class MenuComponent implements OnInit {
       },
       (error) => {
         console.error('Error updating menu:', error);
-        // คุณสามารถเพิ่มโค้ดเพื่อแสดงข้อความผิดพลาดได้ที่นี่
-        console.error('Error updating menu:', error);
+        // console.error('Error updating menu:', error);
+        alert('เกิดข้อผิดพลาดในการอัปเดตเมนู');
+
       }
     );
   }

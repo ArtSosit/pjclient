@@ -14,4 +14,12 @@
   <body>
     <app-root></app-root>
   </body>
+
+  <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+  <script>
+    const socket = io(); // Connect to the server at the same host and port
+    socket.on("connect", () => {
+      console.log("Connected");
+    });
+  </script>
 </html>

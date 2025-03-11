@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { environment } from '@env/environment';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Component({
   selector: 'app-table-management',
@@ -15,14 +16,17 @@ export class TableManagementComponent implements OnInit {
   tableCount: number = 1; // จัดการจำนวนโต๊ะที่เพิ่มเข้ามา
   editingTable: any = null;
   constructor(private https: HttpClient, private router: Router) { }
-
+  jwtHelper = new JwtHelperService();
+  token: any;
   ngOnInit(): void {
-    this.userId = localStorage.getItem('userId');
+
     this.loadTables();
   }
 
   // โหลดโต๊ะจาก Backend
   loadTables() {
+    this.token = localStorage.getItem('token');
+    this.userId = this.jwtHelper.decodeToken(this.token).userId;
     if (this.userId) {
       this.https.get<any[]>(`${environment.apiBaseUrl}/api/tables/${this.userId}`).subscribe(
         (data) => {

@@ -20,8 +20,7 @@
     </option>
   </select>
 </div>
-<div class="menu-container">
-  <!-- 🌟 ส่วนเมนูแนะนำ -->
+<ng-container *ngIf="filteredMenus.length > 0">
   <div class="recommended-menu" *ngIf="recommendedMenusExist()">
     <h2>🌟 เมนูแนะนำ</h2>
     <ng-container *ngFor="let menu of filteredMenus">
@@ -36,10 +35,10 @@
           <span
             *ngIf="isBestSeller(menu.item_id)"
             class="badge bestseller-badge"
+            >🔥 ขายดี</span
           >
-            🔥 ขายดี
-          </span>
           <h3>{{ menu.item_name }}</h3>
+          <p>{{ menu.category }}</p>
           <p *ngIf="menu.status === 'unavailable'" class="sold-out">
             ❌ หมดชั่วคราว
           </p>
@@ -48,25 +47,27 @@
           </p>
           <p>
             ราคา:
-            <span *ngIf="menu.discount > 0" class="original-price">
-              {{ menu.price | number : "1.2-2" }} บาท
-            </span>
+            <span *ngIf="menu.discount > 0" class="original-price"
+              >{{ menu.price | number : "1.2-2" }} บาท</span
+            >
             <span *ngIf="menu.discount > 0" class="discounted-price">
               {{
                 getDiscountedPrice(menu.price, menu.discount) | number : "1.2-2"
               }}
               บาท
             </span>
-            <span *ngIf="menu.discount === 0 || menu.discount === null">
-              {{ menu.price | number : "1.2-2" }} บาท
-            </span>
+            <span *ngIf="menu.discount === 0 || menu.discount === null"
+              >{{ menu.price | number : "1.2-2" }} บาท</span
+            >
           </p>
         </div>
       </div>
     </ng-container>
   </div>
+</ng-container>
 
-  <!-- 🍽️ ส่วนเมนูปกติ -->
+<!-- 🍽️ ส่วนเมนูปกติ -->
+<ng-container *ngIf="filteredMenus.length > 0">
   <div class="all-menu">
     <h2>🍽️ เมนูทั้งหมด</h2>
     <ng-container *ngFor="let menu of filteredMenus">
@@ -81,10 +82,10 @@
           <span
             *ngIf="isBestSeller(menu.item_id)"
             class="badge bestseller-badge"
+            >🔥 ขายดี</span
           >
-            🔥 ขายดี
-          </span>
           <h3>{{ menu.item_name }}</h3>
+          <p>{{ menu.category }}</p>
           <p *ngIf="menu.status === 'unavailable'" class="sold-out">
             ❌ หมดชั่วคราว
           </p>
@@ -93,88 +94,88 @@
           </p>
           <p>
             ราคา:
-            <span *ngIf="menu.discount > 0" class="original-price">
-              {{ menu.price | number : "1.2-2" }} บาท
-            </span>
+            <span *ngIf="menu.discount > 0" class="original-price"
+              >{{ menu.price | number : "1.2-2" }} บาท</span
+            >
             <span *ngIf="menu.discount > 0" class="discounted-price">
               {{
                 getDiscountedPrice(menu.price, menu.discount) | number : "1.2-2"
               }}
               บาท
             </span>
-            <span *ngIf="menu.discount === 0 || menu.discount === null">
-              {{ menu.price | number : "1.2-2" }} บาท
-            </span>
+            <span *ngIf="menu.discount === 0 || menu.discount === null"
+              >{{ menu.price | number : "1.2-2" }} บาท</span
+            >
           </p>
         </div>
       </div>
     </ng-container>
   </div>
+</ng-container>
 
-  <!--car Modal -->
-  <div *ngIf="selectedMenu" class="modal-backdrop">
-    <div class="modal-container">
-      <div class="modal-header">
-        <h2>{{ selectedMenu.item_name }}</h2>
-        <button type="button" class="close-btn" (click)="closeModal()">
-          &times;
-        </button>
-      </div>
+<!--car Modal -->
+<div *ngIf="selectedMenu" class="modal-backdrop">
+  <div class="modal-container">
+    <div class="modal-header">
+      <h2>{{ selectedMenu.item_name }}</h2>
+      <button type="button" class="close-btn" (click)="closeModal()">
+        &times;
+      </button>
+    </div>
 
-      <div class="modal-body" style="text-align: center">
-        <img
-          [src]="selectedMenu.imageUrl"
-          alt="menu image"
-          class="menu-image"
-          style="width: 100%; height: auto"
+    <div class="modal-body" style="text-align: center">
+      <img
+        [src]="selectedMenu.imageUrl"
+        alt="menu image"
+        class="menu-image"
+        style="width: 100%; height: auto"
+      />
+
+      <!-- แสดงราคา -->
+      <p>
+        ราคา:
+        <span *ngIf="selectedMenu.discount > 0" class="original-price">
+          {{ selectedMenu.price | number : "1.2-2" }} บาท
+        </span>
+        <span *ngIf="selectedMenu.discount > 0" class="discounted-price">
+          {{
+            getDiscountedPrice(selectedMenu.price, selectedMenu.discount)
+              | number : "1.2-2"
+          }}
+          บาท
+        </span>
+        <span *ngIf="selectedMenu.discount === 0">
+          {{ selectedMenu.price | number : "1.2-2" }} บาท
+        </span>
+      </p>
+
+      <!-- ส่วนเลือกจำนวน -->
+      <div class="quantity-container">
+        <button class="quantity-btn" (click)="decreaseQuantity()">-</button>
+        <input
+          type="number"
+          [(ngModel)]="quantity"
+          (change)="validateQuantity()"
+          class="quantity-input"
         />
-
-        <!-- แสดงราคา -->
-        <p>
-          ราคา:
-          <span *ngIf="selectedMenu.discount > 0" class="original-price">
-            {{ selectedMenu.price | number : "1.2-2" }} บาท
-          </span>
-          <span *ngIf="selectedMenu.discount > 0" class="discounted-price">
-            {{
-              getDiscountedPrice(selectedMenu.price, selectedMenu.discount)
-                | number : "1.2-2"
-            }}
-            บาท
-          </span>
-          <span *ngIf="selectedMenu.discount === 0">
-            {{ selectedMenu.price | number : "1.2-2" }} บาท
-          </span>
-        </p>
-
-        <!-- ส่วนเลือกจำนวน -->
-        <div class="quantity-container">
-          <button class="quantity-btn" (click)="decreaseQuantity()">-</button>
-          <input
-            type="number"
-            [(ngModel)]="quantity"
-            (change)="validateQuantity()"
-            class="quantity-input"
-          />
-          <button class="quantity-btn" (click)="increaseQuantity()">+</button>
-        </div>
-
-        <!-- ✅ หมายเหตุเพิ่มเติม -->
-        <div class="option-container">
-          <label for="note">หมายเหตุเพิ่มเติม:</label>
-          <textarea
-            id="note"
-            [(ngModel)]="additionalNote"
-            rows="3"
-            placeholder="เช่น ไม่ใส่พริก, เพิ่มชีส"
-          ></textarea>
-        </div>
-
-        <!-- ปุ่มเก็บลงตะกร้า -->
-        <button class="add-to-cart-btn" (click)="addToCart()">
-          เก็บลงตะกร้า
-        </button>
+        <button class="quantity-btn" (click)="increaseQuantity()">+</button>
       </div>
+
+      <!-- ✅ หมายเหตุเพิ่มเติม -->
+      <div class="option-container">
+        <label for="note">หมายเหตุเพิ่มเติม:</label>
+        <textarea
+          id="note"
+          [(ngModel)]="additionalNote"
+          rows="3"
+          placeholder="เช่น ไม่ใส่พริก, เพิ่มชีส"
+        ></textarea>
+      </div>
+
+      <!-- ปุ่มเก็บลงตะกร้า -->
+      <button class="add-to-cart-btn" (click)="addToCart()">
+        เก็บลงตะกร้า
+      </button>
     </div>
   </div>
 </div>

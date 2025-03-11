@@ -1,5 +1,12 @@
 <div class="card-container">
-  <!-- Card สำหรับยอดขาย -->
+  <!-- Date range input -->
+  <div class="date-range-picker">
+    <input type="date" [(ngModel)]="startDate" name="startDate" />
+    <input type="date" [(ngModel)]="endDate" name="endDate" />
+    <button class="btn btn-primary" (click)="fetchdata()">View Sales</button>
+  </div>
+
+  <!-- Card for total sales -->
   <div class="card">
     <div class="card-header">รวมยอดขาย</div>
     <div class="card-body">
@@ -8,7 +15,7 @@
     </div>
   </div>
 
-  <!-- ตารางสำหรับแสดงข้อมูลยอดขายตามเมนู -->
+  <!-- Table for displaying sales data by menu item -->
   <div class="table-container">
     <table class="table table-bordered">
       <thead>

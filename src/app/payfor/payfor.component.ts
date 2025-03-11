@@ -112,9 +112,11 @@ export class PayforComponent implements OnInit {
       console.error("❌ ไม่พบ orderId");
       return;
     }
-
+    const storeId = localStorage.getItem("storeId");
+    console.log("id", storeId)
     const formData = new FormData();
-    formData.append("proof", this.file); // 'proof' คือตัวแปรที่ backend ต้องรับ
+    formData.append("proof", this.file);
+    formData.append("storeId", storeId || "");
 
     this.http.put<any>(`${environment.apiBaseUrl}/api/orders/proof/${orderId}`, formData)
       .subscribe(

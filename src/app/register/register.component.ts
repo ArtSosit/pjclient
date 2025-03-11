@@ -3,6 +3,7 @@ import { AuthService } from '../auth.service';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { environment } from '@env/environment';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 
 @Component({
@@ -34,74 +35,57 @@ export class RegisterComponent implements OnInit {
   storeImage: File | null = null;
   promptpayImage: File | null = null;
   imagePreview: string | ArrayBuffer | null = null;
-
+  jwtHelper = new JwtHelperService();
+  token: any;
   constructor(private authService: AuthService, private http: HttpClient, private router: Router) { }
   ngOnInit(): void {
-    const storedEmail = localStorage.getItem('email');
-    const storedPassword = localStorage.getItem('password');
-
-    if (storedEmail && storedPassword) {
-      // ถ้ามีข้อมูลให้ทำการล็อกอินอัตโนมัติ
-
-      this.auth.email = storedEmail;
-      this.auth.password = storedPassword;
-      this.onSubmit(this.auth.email, this.auth.password); // เรียกฟังก์ชัน onSubmit() เพื่อล็อกอิน
-    }
-  }
-
-  onSubmit(email: string, password: string) {
-    if (!email || !password) {
-      this.loginError = 'Please enter both email and password.';
+    this.token = localStorage.getItem('token');
+    if (!this.token || this.jwtHelper.isTokenExpired(this.token)) {
       return;
+    } else {
+      // ตรวจสอบได้ว่า token ยังใช้ได้หรือไม่
+      this.router.navigate(['/main/menu']);
     }
-
-    this.http.post(`${environment.apiBaseUrl}/api/auth/login`, this.auth).subscribe(
-      (response: any) => {
-        console.log('Login response:', response);
-        // Check the success flag in the response
-        if (response) {
-          console.log('Login successful:', response);
-
-          // เก็บ userId และข้อมูลการล็อกอินใน localStorage
-          localStorage.setItem('userId', response.userId);
-          localStorage.setItem('email', this.auth.email);
-          localStorage.setItem('password', this.auth.password);
-
-          // Redirect after successful login
-          this.router.navigate(['/main/menu']);
-        } else {
-          this.loginError = 'Invalid credentials. Please try again.';
-        }
-      },
-      (error) => {
-        // Handle login error: show user-friendly message
-        console.error('Login error:', error);
-        this.loginError = 'An error occurred during login. Please try again later.';
-      }
-    );
   }
+
+
+
 
   onRegister() {
     this.authService.register(this.user).subscribe(
       response => {
-        console.log('Registration successful!', response);
-        // this.user.userID = response.userID;
+        console.log('✅ Registration successful!', response);
         this.isRegistered = true;
-        localStorage.setItem('userId', response.userID);
-        localStorage.setItem('email', this.user.email);
-        localStorage.setItem('password', this.user.password);
+        this.token = response.token;
+        localStorage.setItem('token', this.token);
+        // เก็บเฉพาะ userId และ email (ไม่เก็บรหัสผ่าน)
+        // localStorage.setItem('userId', response.userID);
+        // localStorage.setItem('email', this.user.email);
+
+        // ห้ามเก็บรหัสผ่านใน localStorage
+        alert('✅ สมัครสมาชิกสำเร็จ!');
       },
       error => {
-        console.error('Error registering user', error);
+        console.error('❌ Error registering user:', error);
+
+        if (error.status === 400) {
+          alert('❌ ชื่อผู้ใช้หรืออีเมลนี้ถูกใช้งานแล้ว!');
+        } else if (error.status === 500) {
+          alert('❌ เกิดข้อผิดพลาดในระบบ โปรดลองใหม่อีกครั้ง!');
+        } else {
+          alert('❌ ไม่สามารถสมัครสมาชิกได้ กรุณาลองใหม่!');
+        }
       }
     );
-    this.isRegistered = true;
   }
+
+
   onSubmitAdditionalInfo() {
+    this.user.userID = this.jwtHelper.decodeToken(this.token).userId;
     const formData = new FormData();
     console.log('User:', this.user);
 
-    formData.append('userID', localStorage.getItem('userId') || '');
+    formData.append('userID', this.user.userID);
     formData.append('storeName', this.user.storeName);
     formData.append('storeDetails', this.user.storeDetails);
     formData.append('contactInfo', this.user.contactInfo);
@@ -148,5 +132,5 @@ export class RegisterComponent implements OnInit {
     }
   }
 
-  
+
 }

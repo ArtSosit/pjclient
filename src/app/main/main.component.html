@@ -4,15 +4,17 @@
     alt=""
     style="border-radius: 50%; width: 50px; height: 50px"
   />
-  <a routerLink="/main/menu" class="sidebar-brand">{{ store.store_name }}</a>
-  <a routerLink="/main/info">ข้อมูลร้าน</a>
-  <a routerLink="/main/menu">รายการอาหาร</a>
-  <!-- เพิ่มลิงก์ไปยังหน้าเมนู -->
+  <p class="sidebar-brand">{{ store.store_name }}</p>
+  <a *ngIf="userType !== 'kitchen'" routerLink="/main/info">ข้อมูลร้าน</a>
+  <a *ngIf="userType !== 'kitchen'" routerLink="/main/menu">รายการอาหาร</a>
+  <!-- Visible to all users -->
   <a routerLink="/main/order-list">รายการอาหารที่สั่ง</a>
-  <a routerLink="/main/payment">การชำระเงิน</a>
-  <a routerLink="/main/table-management">โต๊ะอาหาร</a>
-  <a routerLink="/main/dashboard">รวมยอดขาย</a>
-  <a routerLink="/main/addkitchen">เพิ่มครัว</a>
+  <a *ngIf="userType !== 'kitchen'" routerLink="/main/payment">การชำระเงิน</a>
+  <a *ngIf="userType !== 'kitchen'" routerLink="/main/table-management"
+    >โต๊ะอาหาร</a
+  >
+  <a *ngIf="userType !== 'kitchen'" routerLink="/main/dashboard">รวมยอดขาย</a>
+  <a *ngIf="userType !== 'kitchen'" routerLink="/main/addkitchen">เพิ่มครัว</a>
   <a routerLink="/login" (click)="logout()">logout</a>
 </div>
 <div class="main-content">

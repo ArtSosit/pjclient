@@ -4,7 +4,7 @@
 <div class="container">
   <div class="card" *ngIf="!isRegistered">
     <h2 class="text-center">สมัครสมาชิก</h2>
-    <form (ngSubmit)="onRegister()">
+    <form (ngSubmit)="onRegister()" #form="ngForm">
       <div class="form-group">
         <label for="username">Username</label>
         <input
@@ -36,7 +36,11 @@
         />
       </div>
       <div style="display: flex; justify-content: center; margin-top: 10px">
-        <button type="submit" class="btn btn-success btn-block">
+        <button
+          type="submit"
+          class="btn btn-success btn-block"
+          [disabled]="form.invalid"
+        >
           Register
         </button>
         <a routerLink="/login" style="color: gray">login?</a>
@@ -47,7 +51,7 @@
   <!-- ฟอร์มสำหรับกรอกข้อมูลเพิ่มเติม -->
   <div class="card2" *ngIf="isRegistered">
     <h2 class="text-center">เพิ่มข้อมูล</h2>
-    <form (ngSubmit)="onSubmitAdditionalInfo()">
+    <form (ngSubmit)="onSubmitAdditionalInfo()" #form="ngForm">
       <div class="form-group">
         <div>
           <label for="storeImage">Store Image</label>
@@ -139,7 +143,13 @@
         />
       </div>
       <div style="display: flex; justify-content: center; margin-top: 10px">
-        <button type="submit" class="btn btn-primary btn-block">Submit</button>
+        <button
+          type="submit"
+          class="btn btn-primary btn-block"
+          [disabled]="form.invalid"
+        >
+          Submit
+        </button>
       </div>
     </form>
     <div></div>

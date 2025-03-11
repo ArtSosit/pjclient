@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '@env/environment';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { JwtHelperService } from '@auth0/angular-jwt';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -13,30 +14,38 @@ export class DashboardComponent implements OnInit {
   errorMessage: string = '';
   startDate: string = '';
   endDate: string = '';
-  constructor(private http: HttpClient, private route: ActivatedRoute) { this.fetchdata(); }
+  token: string | null = null;
+  userId: string | null = null;
+  private jwtHelper = new JwtHelperService();
+  constructor(private http: HttpClient, private route: ActivatedRoute, private router: Router) { this.fetchdata(); }
   totalSales: number = 0;
   ngOnInit(): void {
-
-  }
-  fetchdata() {
-    this.storeId = localStorage.getItem('userId');
-
-    if (!this.storeId) {
-      console.error("Store ID is missing in localStorage.");
-      this.errorMessage = 'Store ID is missing. Please log in again.';
-      return;
+    this.token = localStorage.getItem('token');
+    if (!this.token || this.jwtHelper.isTokenExpired(this.token)) {
+      this.router.navigate(['/login']);
+    } else {
+      // ตรวจสอบได้ว่า token ยังใช้ได้หรือไม่
+      this.userId = this.jwtHelper.decodeToken(this.token).userId;
+      console.log('User ID:', this.userId);
+      this.fetchdata();
     }
-
+  }
+  // test() {
+  //   console.log('startDate:', this.startDate);
+  // }
+  fetchdata() {
     // สร้าง URL สำหรับ API พร้อมส่ง startDate และ endDate (ถ้ามี)
-    let url = `${environment.apiBaseUrl}/api/sales/${this.storeId}`;
+    let url = `${environment.apiBaseUrl}/api/sales/${this.userId}`;
 
     if (this.startDate && this.endDate) {
       url += `?startDate=${this.startDate}&endDate=${this.endDate}`;
+      console.log('URL:', url);
     }
 
     this.http.get<any[]>(url).subscribe({
       next: (data) => {
         this.sales = data;
+        console.log('Sales data:', this.sales);
         this.totalSales = data.reduce((sum, item) => sum + parseFloat(item.total_sales), 0);
       },
       error: (error) => {
@@ -47,6 +56,8 @@ export class DashboardComponent implements OnInit {
       }
     });
   }
+
+
 
 }
 

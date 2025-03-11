@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { environment } from '@env/environment';
-import { io } from "socket.io-client";
+
 
 @Component({
   selector: 'app-food-list',
@@ -24,23 +24,11 @@ export class FoodListComponent implements OnInit {
   serverTime: any;
 
 
-  constructor(private http: HttpClient, private route: ActivatedRoute) { this.loadCart(); this.socket = io("http://localhost:3000"); }
+  constructor(private http: HttpClient, private route: ActivatedRoute) { }
   ngOnInit(): void {
     this.getServerTime()
 
     this.fetchMenus();
-    this.orderId = localStorage.getItem("orderId");
-    if (this.orderId) {
-      this.socket.emit("registerOrder", this.orderId);
-    }
-
-    this.socket.on("orderCancelled", (data: any) => {
-      if (data.orderId === this.orderId) {
-        localStorage.removeItem("cart");
-        localStorage.removeItem("orderId");
-        alert("ออเดอร์ของคุณถูกยกเลิกแล้ว");
-      }
-    });
     this.getPopularMenus()
   }
 

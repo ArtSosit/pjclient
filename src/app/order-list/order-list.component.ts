@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { JwtHelperService } from '@auth0/angular-jwt';
 import { environment } from '@env/environment';
 
 @Component({
@@ -14,14 +15,16 @@ export class OrderListComponent implements OnInit {
 
   constructor(private http: HttpClient) { this.fetchOrders(); }
   // newTable: any = {table_number:'',table_qr:''}
+  jwtHelper = new JwtHelperService();
+  token: any;
   ngOnInit(): void {
     this.fetchOrders();
-
   }
 
   fetchOrders(): void {
-    // ตรวจสอบว่า userId มีอยู่ใน localStorage หรือไม่
-    this.userId = localStorage.getItem('userId');
+    this.token = localStorage.getItem('token');
+    this.userId = this.jwtHelper.decodeToken(this.token || '').userId;
+    console.log('User ID:', this.userId);
 
     if (!this.userId) {
       console.error('User ID not found in localStorage');

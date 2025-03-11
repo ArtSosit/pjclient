@@ -1,4 +1,4 @@
-<html >
+<html>
   <body>
     <div class="container mt-5">
       <div class="card text-center p-4 shadow">
@@ -13,7 +13,8 @@
           />
 
           <p>
-            <strong>ชื่อ:</strong> <span id="name">{{ store.store_name }}</span>
+            <strong>ชื่อ:</strong>
+            <span id="name">{{ store?.store_name || "" }}</span>
           </p>
           <p>
             <strong>Username:</strong>
@@ -54,6 +55,14 @@
           (click)="edit()"
         >
           <i class="bi bi-pencil-square"></i> แก้ไขข้อมูล
+        </button>
+
+        <button
+          class="btn btn-outline-danger mt-2"
+          data-bs-toggle="modal"
+          data-bs-target="#editPasswordModal"
+        >
+          แก้ไขรหัสผ่าน
         </button>
       </div>
     </div>
@@ -191,21 +200,96 @@
               class="btn btn-success"
               id="saveChanges"
               (click)="Updateinfo()"
+              data-bs-dismiss="modal"
             >
               บันทึก
             </button>
           </div>
         </div>
       </div>
-      <!-- <script>
-        document.addEventListener("DOMContentLoaded", function () {
-          const timeInput = document.getElementById("editOpenTime");
-          const now = new Date();
-          const hours = String(now.getHours()).padStart(2, "0"); // 24-hour format
-          const minutes = String(now.getMinutes()).padStart(2, "0");
-          timeInput.value = `${hours}:${minutes}`;
-        });
-      </script> -->
+    </div>
+
+    <div
+      class="modal fade"
+      id="editPasswordModal"
+      tabindex="-1"
+      aria-labelledby="editPasswordModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="editPasswordModalLabel">
+              แก้ไขรหัสผ่าน
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form [formGroup]="passwordForm">
+              <div class="mb-3">
+                <label for="editPassword" class="form-label"
+                  >รหัสผ่านเดิม</label
+                >
+                <input
+                  type="password"
+                  id="password"
+                  class="form-control"
+                  formControlName="password"
+                  name="password"
+                  (ngModelChange)="onInputChange()"
+                />
+              </div>
+              <div class="mb-3">
+                <label for="editNewPassword" class="form-label"
+                  >รหัสผ่านใหม่</label
+                >
+                <input
+                  type="password"
+                  id="new_password"
+                  class="form-control"
+                  formControlName="new_password"
+                  name="new_password"
+                />
+              </div>
+              <div class="mb-3">
+                <label for="editConfirmPassword" class="form-label"
+                  >ยืนยันรหัสผ่านใหม่</label
+                >
+                <input
+                  type="password"
+                  id="confirm_password"
+                  class="form-control"
+                  formControlName="confirm_password"
+                  name="confirm_password"
+                />
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              ยกเลิก
+            </button>
+            <button
+              type="button"
+              class="btn btn-success"
+              id="saveChanges"
+              (click)="UpdatePassword()"
+              data-bs-dismiss="modal"
+            >
+              บันทึก
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   </body>
 </html>
