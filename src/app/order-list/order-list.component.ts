@@ -58,7 +58,7 @@ export class OrderListComponent implements OnInit {
       .subscribe({
         next: (response) => {
           console.log("Update successful", response);
-
+          this.fetchOrders();
         },
         error: (err) => console.error("Update failed", err),
       });
@@ -67,7 +67,10 @@ export class OrderListComponent implements OnInit {
   Detail_cancelled(id: number) {
     this.http.put(`${environment.apiBaseUrl}/api/orders/cancelledDetail/` + id, { status })
       .subscribe({
-        next: (response) => console.log("Update successful", response),
+        next: (response) => {
+          console.log("Update successful", response)
+          this.fetchOrders();
+        },
         error: (err) => console.error("Update failed", err),
       });
   }
@@ -76,7 +79,10 @@ export class OrderListComponent implements OnInit {
     // Make sure to send a request body
     this.http.put(`${environment.apiBaseUrl}/api/orders/cancel-order/` + id, { status })
       .subscribe({
-        next: (response) => console.log("Update successful", response),
+        next: (response) => {
+          console.log("Update successful", response)
+          this.fetchOrders();
+        },
         error: (err) => console.error("Update failed", err),
       });
   }
@@ -84,7 +90,10 @@ export class OrderListComponent implements OnInit {
   Order_success(id: number) {
     this.http.put(`${environment.apiBaseUrl}/api/orders/complete-order/` + id, { status })
       .subscribe({
-        next: (response) => console.log("Update successful", response),
+        next: (response) => {
+          console.log("Update successful", response)
+          this.fetchOrders();
+        },
         error: (err) => console.error("Update failed", err),
       });
   }

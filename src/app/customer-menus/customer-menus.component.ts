@@ -30,22 +30,37 @@ export class CustomerMenusComponent implements OnInit {
     console.log(`Store ID: ${this.storeId}, Table ID: ${this.tableId}`);
     this.fetchMenus();
     this.listenForOrderCancellation();
-    this.listenForConfirmPayment
+    this.listenForConfirmPayment();
+    this.listenForcancel();
 
   }
+
+  listenForcancel() {
+    this.socketService.listenEvent("orderCancelled", (data: any) => {
+      console.log("cancel")
+      const OrderId = localStorage.getItem('orderId');
+      if (OrderId === data.orderId) {
+        alert(`ยกเลิกออเดอร์แล้ว`);
+        localStorage.removeItem('orderId');
+
+      }
+
+    }
+    );
+  };
+
   listenForConfirmPayment() {
     this.socketService.listenEvent("confirmPayment", (data: any) => {
       const OrderId = localStorage.getItem('orderId');
       console.log("form socket", data);
-      // if (OrderId === data.orderId) {
-      localStorage.removeItem('orderId');
-      alert(`ยืนยันการชำระเงินแล้ว`);
-      // }
+      if (OrderId === data.orderId) {
+        localStorage.removeItem('orderId');
+        alert(`ยืนยันการชำระเงินแล้ว`);
+      }
     });
   }
 
   listenForOrderCancellation() {
-
     this.socketService.listenEvent("orderCancelled", (data: any) => {
       console.log("cancell")
       const storedOrderId = localStorage.getItem('orderId');
