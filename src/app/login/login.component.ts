@@ -64,6 +64,8 @@ export class LoginComponent implements OnInit {
 
           // 🔀 Redirect ไปหน้าเมนูหลังล็อกอิน
           if (response && response.token) {
+            alert(response.message)
+            // ✅ เก็บ Token แทนการเก็บ Password
             localStorage.setItem('token', response.token);
             const userType = this.checkUserRole();
             if (userType === 'kitchen') {
@@ -79,6 +81,7 @@ export class LoginComponent implements OnInit {
       },
       (error) => {
         console.error('❌ Login error:', error);
+        alert("ไม่มีข้อมูลผู้ใช้นี้หรือรหัสผ่านไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง")
         this.loginError = 'An error occurred during login. Please try again later.';
       }
     );

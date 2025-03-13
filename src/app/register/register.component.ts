@@ -85,6 +85,8 @@ export class RegisterComponent implements OnInit {
     const formData = new FormData();
     console.log('User:', this.user);
 
+
+
     formData.append('userID', this.user.userID);
     formData.append('storeName', this.user.storeName);
     formData.append('storeDetails', this.user.storeDetails);
@@ -93,17 +95,17 @@ export class RegisterComponent implements OnInit {
     formData.append('openTime', this.user.openTime);
     formData.append('closeTime', this.user.closeTime);
 
-    if (this.storeImage) {
+    if (this.storeImage && this.promptpayImage) {
       formData.append('storeImage', this.storeImage, this.storeImage.name);
-    } else {
-      console.warn('No store image selected');
-    }
-
-    if (this.promptpayImage) {
       formData.append('promptpayimage', this.promptpayImage, this.promptpayImage.name);
     } else {
-      console.warn('No promptpay image selected');
+      // console.warn('No store image selected');
+      alert('กรุณาอัปโหลดรูปภาพร้านค้าและรูปภาพพร้อมเพย์')
+      return;
     }
+
+
+
 
     formData.forEach((value, key) => {
       console.log(`${key}:`, value);
