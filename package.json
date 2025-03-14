@@ -24,6 +24,7 @@
     "angularx-qrcode": "^18.0.2",
     "bootstrap": "^5.3.3",
     "bootstrap-icons": "^1.11.3",
+    "dotenv": "^16.4.7",
     "primeicons": "^7.0.0",
     "primeng": "^17.18.8",
     "qrcode": "^1.5.4",
