@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiBaseUrl: "https://your-production-url.com",
+  apiBaseUrl: "https://pjserver.onrender.com",
 };
